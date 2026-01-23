@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MusicX — Private Cloud Music & Video Player</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px 40px;
+            color: white;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            margin-bottom: 30px;
+        }
+
+        .platform-badges {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        section {
+            margin-bottom: 40px;
+        }
+
+        section:last-child {
+            margin-bottom: 0;
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .feature-item {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .feature-item::before {
+            content: "✓";
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .disclaimer {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px 20px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+
+        .disclaimer p {
+            margin: 5px 0;
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px 20px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: #ff9800;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: white;
+        }
+
+        .contact {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        footer a {
+            color: white;
+        }
+
+        footer a:hover {
+            color: #ffd700;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .main-content {
+                padding: 25px;
+            }
+
+            .platform-badges {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>MusicX</h1>
+            <p class="subtitle">Private Cloud Music & Video Player</p>
+            <div class="platform-badges">
+                <span class="badge">📱 iOS</span>
+                <span class="badge">🤖 Android</span>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <section id="overview">
+                <h2>Overview</h2>
+                <p>MusicX is a private cloud music & video player for iOS and Android. It helps you organize and play your own media library from local storage and supported cloud/self-hosted sources.</p>
+            </section>
+
+            <section id="features">
+                <h2>Key Features</h2>
+                <div class="features-grid">
+                    <div class="feature-item">Audio & video playback in a unified player screen</div>
+                    <div class="feature-item">Local library management (including folders)</div>
+                    <div class="feature-item">Wi-Fi transfer (local network)</div>
+                    <div class="feature-item">Optional iCloud Drive storage for notes and bookmarks</div>
+                    <div class="feature-item">Built-in browser (with user-initiated import actions)</div>
+                    <div class="feature-item">Optional Last.fm login for scrobbling and music history</div>
+                </div>
+            </section>
+
+            <section id="disclaimer">
+                <h2>What MusicX is NOT</h2>
+                <div class="disclaimer">
+                    <p><strong>⚠️ MusicX does not provide or host copyrighted content.</strong></p>
+                    <p><strong>⚠️ MusicX is designed to manage content that users own or have rights to access.</strong></p>
+                </div>
+            </section>
+
+            <section id="privacy">
+                <h2>Legal</h2>
+                <div class="info-box">
+                    <p>Please read our policies:</p>
+                    <p><a href="privacy-policy.html">📄 Privacy Policy</a> | <a href="terms-of-service.html">📋 Terms of Service</a></p>
+                </div>
+            </section>
+
+            <section id="status">
+                <h2>Status</h2>
+                <p>MusicX is currently under development. Features and supported services may change over time.</p>
+                <span class="status-badge">🚧 Under Development</span>
+            </section>
+
+            <section id="contact">
+                <h2>Support / Contact</h2>
+                <p>For any questions or suggestions, please contact us:</p>
+                <p style="margin-top: 10px;">📧 Email: <a href="mailto:kylele2089@gmail.com">kylele2089@gmail.com</a></p>
+            </section>
+        </div>
+
+        <footer>
+            <div class="contact">
+                <p>&copy; 2026 MusicX. All rights reserved.</p>
+                <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.9;">Your personal music space</p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
