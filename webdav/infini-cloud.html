@@ -127,33 +127,33 @@
 <body>
     <div class="container">
         <div class="lang-switcher">
-            <button class="lang-btn" onclick="switchLang('en')">EN</button>
-            <button class="lang-btn" onclick="switchLang('zh')">中文</button>
-            <button class="lang-btn" onclick="switchLang('ja')">日本語</button>
-            <button class="lang-btn" onclick="switchLang('ru')">RU</button>
+            <button class="lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
+            <button class="lang-btn" data-lang="zh" onclick="switchLang('zh')">中文</button>
+            <button class="lang-btn" data-lang="ja" onclick="switchLang('ja')">日本語</button>
+            <button class="lang-btn" data-lang="ru" onclick="switchLang('ru')">RU</button>
         </div>
         
         <div class="header">
-            <h1 id="title"></h1>
-            <p class="subtitle" id="subtitle"></p>
+            <h1 id="title">InfiniCLOUD WebDAV Configuration</h1>
+            <p class="subtitle" id="subtitle">Formerly TeraCLOUD, provides free WebDAV cloud storage</p>
         </div>
 
         <div class="card">
-            <h2 id="config-title"></h2>
+            <h2 id="config-title">📋 Default Configuration</h2>
             <div class="info-item">
-                <div class="info-label" id="server-label"></div>
+                <div class="info-label" id="server-label">Server Address (Example)</div>
                 <div class="info-value">yaene.infini-cloud.net</div>
             </div>
             <div class="info-item">
-                <div class="info-label" id="protocol-label"></div>
+                <div class="info-label" id="protocol-label">Protocol</div>
                 <div class="info-value">HTTPS (443)</div>
             </div>
             <div class="info-item">
-                <div class="info-label" id="path-label"></div>
+                <div class="info-label" id="path-label">Root Path</div>
                 <div class="info-value">/dav/</div>
             </div>
             <div class="info-item">
-                <div class="info-label" id="auth-label"></div>
+                <div class="info-label" id="auth-label">Authentication</div>
                 <div class="info-value">Basic Authentication</div>
             </div>
         </div>
@@ -319,6 +319,14 @@
             return 'en'; // Default to English
         }
 
+        function setActiveLangButton(lang) {
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            const btn = document.querySelector(`.lang-btn[data-lang="${lang}"]`);
+            if (btn) btn.classList.add('active');
+        }
+
         function switchLang(lang) {
             const t = translations[lang];
             if (!t) return;
@@ -366,22 +374,25 @@
             });
 
             // Update active button
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            if (typeof event !== 'undefined' && event.target) {
-                event.target.classList.add('active');
-            }
+            setActiveLangButton(lang);
 
             // Save preference
-            localStorage.setItem('preferredLanguage', lang);
+            try {
+                localStorage.setItem('preferredLanguage', lang);
+            } catch (_) {
+                // ignore
+            }
         }
 
         // Initialize
         window.onload = function() {
-            const savedLang = localStorage.getItem('preferredLanguage') || detectLanguage();
+            let savedLang = 'en';
+            try {
+                savedLang = localStorage.getItem('preferredLanguage') || detectLanguage();
+            } catch (_) {
+                savedLang = detectLanguage();
+            }
             switchLang(savedLang);
-            document.querySelector(`[onclick="switchLang('${savedLang}')"]`).classList.add('active');
         };
     </script>
 </body>
