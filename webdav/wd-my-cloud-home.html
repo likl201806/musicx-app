@@ -1,204 +1,433 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WD My Cloud Home WebDAV 配置说明</title>
+    <title>WD My Cloud Home WebDAV Configuration</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans CJK SC", sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f5f5f5;
-            padding: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans CJK SC", "Noto Sans CJK JP", sans-serif;
+            line-height: 1.6; color: #333; background: #f5f5f5; padding: 16px;
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
+        .container { max-width: 800px; margin: 0 auto; }
         .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 24px 20px;
-            border-radius: 12px;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            color: white; padding: 24px 20px; border-radius: 12px; margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15); position: relative;
         }
-        h1 {
-            font-size: 1.8rem;
-            margin-bottom: 8px;
+        .lang-switcher { position: absolute; top: 12px; right: 12px; display: flex; gap: 8px; }
+        .lang-btn {
+            background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3);
+            color: white; padding: 4px 10px; border-radius: 6px; cursor: pointer;
+            font-size: 0.85rem; transition: all 0.3s;
         }
-        .subtitle {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
+        .lang-btn:hover { background: rgba(255,255,255,0.3); }
+        .lang-btn.active { background: rgba(255,255,255,0.9); color: #667eea; font-weight: 600; }
+        h1 { font-size: 1.8rem; margin-bottom: 8px; }
+        .subtitle { font-size: 1rem; opacity: 0.9; }
         .card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background: white; border-radius: 12px; padding: 20px;
+            margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         h2 {
-            color: #667eea;
-            font-size: 1.3rem;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #667eea;
+            color: #667eea; font-size: 1.3rem; margin-bottom: 12px;
+            padding-bottom: 8px; border-bottom: 2px solid #667eea;
         }
         .info-item {
-            margin-bottom: 12px;
-            padding: 12px;
-            background: #f8f9ff;
-            border-left: 4px solid #667eea;
-            border-radius: 4px;
+            margin-bottom: 12px; padding: 12px; background: #f8f9ff;
+            border-left: 4px solid #667eea; border-radius: 4px;
         }
-        .info-label {
-            font-weight: 600;
-            color: #667eea;
-            margin-bottom: 4px;
-        }
+        .info-label { font-weight: 600; color: #667eea; margin-bottom: 4px; }
         .info-value {
             font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Courier New', monospace;
-            color: #333;
-            word-break: break-all;
+            color: #333; word-break: break-all;
         }
         .warning {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 12px;
-            border-radius: 4px;
-            margin-top: 12px;
+            background: #fff3cd; border-left: 4px solid #ffc107;
+            padding: 12px; border-radius: 4px; margin-top: 12px;
         }
         .tip {
-            background: #e7f3ff;
-            border-left: 4px solid #2196F3;
-            padding: 12px;
-            border-radius: 4px;
-            margin-top: 12px;
+            background: #e7f3ff; border-left: 4px solid #2196F3;
+            padding: 12px; border-radius: 4px; margin-top: 12px;
         }
-        .link-list {
-            list-style: none;
-            padding-left: 0;
-        }
-        .link-list li {
-            margin-bottom: 8px;
-        }
-        .link-list a {
-            color: #667eea;
-            text-decoration: none;
-            word-break: break-all;
-        }
-        .link-list a:hover {
-            text-decoration: underline;
-        }
+        .link-list { list-style: none; padding-left: 0; }
+        .link-list li { margin-bottom: 8px; }
+        .link-list a { color: #667eea; text-decoration: none; word-break: break-all; }
+        .link-list a:hover { text-decoration: underline; }
+        ol, ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
+        code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; font-family: monospace; }
         @media (max-width: 480px) {
-            body {
-                padding: 12px;
-            }
-            h1 {
-                font-size: 1.5rem;
-            }
-            .card {
-                padding: 16px;
-            }
+            body { padding: 12px; }
+            h1 { font-size: 1.5rem; }
+            .card { padding: 16px; }
+            .lang-switcher { position: static; margin-top: 12px; justify-content: center; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>WD My Cloud Home WebDAV 配置</h1>
-            <p class="subtitle">Western Digital 个人云存储设备</p>
+            <div class="lang-switcher">
+                <button class="lang-btn" onclick="switchLang('en')">EN</button>
+                <button class="lang-btn" onclick="switchLang('zh')">中文</button>
+                <button class="lang-btn" onclick="switchLang('ja')">日本語</button>
+                <button class="lang-btn" onclick="switchLang('ru')">RU</button>
+            </div>
+            <h1 id="title"></h1>
+            <p class="subtitle" id="subtitle"></p>
         </div>
 
         <div class="card">
-            <h2>📋 默认配置参考</h2>
+            <h2 id="config-title"></h2>
             <div class="info-item">
-                <div class="info-label">服务器地址（示例）</div>
-                <div class="info-value">wdmycloudXXXXXX.local 或 192.168.x.x</div>
+                <div class="info-label" id="server-label"></div>
+                <div class="info-value">wdmycloudXXXXXX.local / 192.168.x.x</div>
             </div>
             <div class="info-item">
-                <div class="info-label">协议</div>
-                <div class="info-value">HTTP (端口 80)</div>
+                <div class="info-label" id="protocol-label"></div>
+                <div class="info-value">HTTP (80)</div>
             </div>
             <div class="info-item">
-                <div class="info-label">根路径（典型）</div>
+                <div class="info-label" id="path-label"></div>
                 <div class="info-value">/Public</div>
             </div>
             <div class="info-item">
-                <div class="info-label">认证方式</div>
+                <div class="info-label" id="auth-label"></div>
                 <div class="info-value">Basic Authentication</div>
             </div>
         </div>
 
         <div class="card">
-            <h2>🔑 账号与认证</h2>
-            <p><strong>用户名：</strong>您的 My Cloud Home 设备管理员账户</p>
-            <p style="margin-top: 8px;"><strong>密码：</strong>设备管理员密码</p>
+            <h2 id="account-title"></h2>
+            <p><strong id="username-label"></strong> <span id="username-desc"></span></p>
+            <p style="margin-top: 8px;"><strong id="password-label"></strong> <span id="password-desc"></span></p>
             
             <div class="tip">
-                <strong>💡 提示</strong>
-                <p style="margin-top: 4px;">My Cloud Home 的 WebDAV 功能默认可能未启用，具体支持情况取决于固件版本。</p>
+                <strong id="tip-title"></strong>
+                <p style="margin-top: 4px;" id="tip-content"></p>
             </div>
         </div>
 
         <div class="card">
-            <h2>🌐 如何获取设备地址</h2>
-            <ol style="padding-left: 20px;">
-                <li><strong>局域网内：</strong>
-                    <ul style="padding-left: 20px; margin-top: 4px;">
-                        <li>使用设备名称：<code>wdmycloudXXXXXX.local</code>（XXXXXX 为设备编号）</li>
-                        <li>或使用内网 IP：在路由器管理界面查看设备 IP（如 192.168.1.x）</li>
-                    </ul>
-                </li>
-                <li style="margin-top: 8px;"><strong>通过 My Cloud 应用：</strong>
-                    <ul style="padding-left: 20px; margin-top: 4px;">
-                        <li>打开 My Cloud Home 移动应用</li>
-                        <li>在设备设置中查看网络信息</li>
-                    </ul>
-                </li>
-            </ol>
+            <h2 id="howto-title"></h2>
+            <ol id="howto-list"></ol>
             
             <div class="warning">
-                <strong>⚠️ 注意事项</strong>
-                <ul style="padding-left: 20px; margin-top: 4px;">
-                    <li>My Cloud Home 默认使用 HTTP（非加密），局域网使用相对安全</li>
-                    <li>不同固件版本的 WebDAV 配置可能有差异</li>
-                    <li>根路径可能是 <code>/</code>、<code>/Public</code> 或其他，请根据实际情况调整</li>
-                    <li>端口通常是 80，但某些配置下可能使用其他端口</li>
-                </ul>
+                <strong id="warning-title"></strong>
+                <ul style="padding-left: 20px; margin-top: 4px;" id="warning-list"></ul>
             </div>
         </div>
 
         <div class="card">
-            <h2>⚙️ 配置建议</h2>
-            <ul style="padding-left: 20px;">
-                <li>确保设备和手机在同一局域网内</li>
-                <li>如果连接失败，尝试以下根路径：
-                    <ul style="padding-left: 20px; margin-top: 4px;">
-                        <li><code>/</code></li>
-                        <li><code>/Public</code></li>
-                        <li><code>/shares/Public</code></li>
-                    </ul>
-                </li>
-                <li>检查设备固件是否为最新版本</li>
-                <li>部分型号可能需要在设备设置中手动启用 WebDAV</li>
-            </ul>
+            <h2 id="config-suggest-title"></h2>
+            <ul id="config-suggest-list"></ul>
         </div>
 
         <div class="card">
-            <h2>📚 官方参考</h2>
-            <ul class="link-list">
-                <li>📖 <a href="https://support-en.wd.com/" target="_blank">WD 支持中心</a></li>
-                <li>🏠 <a href="https://www.westerndigital.com/products/cloud-storage" target="_blank">WD My Cloud 产品页</a></li>
-            </ul>
+            <h2 id="refs-title"></h2>
+            <ul class="link-list" id="refs-list"></ul>
         </div>
     </div>
+
+    <script>
+        const translations = {
+            en: {
+                title: "WD My Cloud Home WebDAV Configuration",
+                subtitle: "Western Digital personal cloud storage device",
+                configTitle: "📋 Default Configuration Reference",
+                serverLabel: "Server Address (Example)",
+                protocolLabel: "Protocol",
+                pathLabel: "Root Path (Typical)",
+                authLabel: "Authentication",
+                accountTitle: "🔑 Account & Authentication",
+                usernameLabel: "Username:",
+                usernameDesc: "Your My Cloud Home device administrator account",
+                passwordLabel: "Password:",
+                passwordDesc: "Device administrator password",
+                tipTitle: "💡 Tip",
+                tipContent: "My Cloud Home WebDAV functionality may not be enabled by default, exact support depends on firmware version.",
+                howtoTitle: "🌐 How to Get Device Address",
+                howtoSteps: [
+                    {
+                        title: "On LAN:",
+                        items: [
+                            "Use device name: wdmycloudXXXXXX.local (XXXXXX is device ID)",
+                            "Or use internal IP: check device IP in router admin interface (e.g., 192.168.1.x)"
+                        ]
+                    },
+                    {
+                        title: "Through My Cloud App:",
+                        items: [
+                            "Open My Cloud Home mobile app",
+                            "View network information in device settings"
+                        ]
+                    }
+                ],
+                warningTitle: "⚠️ Notes",
+                warningItems: [
+                    "My Cloud Home uses HTTP (unencrypted) by default, relatively safe on LAN",
+                    "WebDAV configuration may differ across firmware versions",
+                    "Root path could be /, /Public, or others, adjust as needed",
+                    "Port is typically 80, but may use other ports in some configurations"
+                ],
+                configSuggestTitle: "⚙️ Configuration Recommendations",
+                configSuggestions: [
+                    "Ensure device and phone are on the same LAN",
+                    "If connection fails, try these root paths: /, /Public, /shares/Public",
+                    "Check if device firmware is up to date",
+                    "Some models may need to manually enable WebDAV in device settings"
+                ],
+                refsTitle: "📚 Official Reference",
+                refs: [
+                    { text: "📖 WD Support Center", url: "https://support-en.wd.com/" },
+                    { text: "🏠 WD My Cloud Product Page", url: "https://www.westerndigital.com/products/cloud-storage" }
+                ]
+            },
+            zh: {
+                title: "WD My Cloud Home WebDAV 配置",
+                subtitle: "Western Digital 个人云存储设备",
+                configTitle: "📋 默认配置参考",
+                serverLabel: "服务器地址（示例）",
+                protocolLabel: "协议",
+                pathLabel: "根路径（典型）",
+                authLabel: "认证方式",
+                accountTitle: "🔑 账号与认证",
+                usernameLabel: "用户名：",
+                usernameDesc: "您的 My Cloud Home 设备管理员账户",
+                passwordLabel: "密码：",
+                passwordDesc: "设备管理员密码",
+                tipTitle: "💡 提示",
+                tipContent: "My Cloud Home 的 WebDAV 功能默认可能未启用，具体支持情况取决于固件版本。",
+                howtoTitle: "🌐 如何获取设备地址",
+                howtoSteps: [
+                    {
+                        title: "局域网内：",
+                        items: [
+                            "使用设备名称：wdmycloudXXXXXX.local（XXXXXX 为设备编号）",
+                            "或使用内网 IP：在路由器管理界面查看设备 IP（如 192.168.1.x）"
+                        ]
+                    },
+                    {
+                        title: "通过 My Cloud 应用：",
+                        items: [
+                            "打开 My Cloud Home 移动应用",
+                            "在设备设置中查看网络信息"
+                        ]
+                    }
+                ],
+                warningTitle: "⚠️ 注意事项",
+                warningItems: [
+                    "My Cloud Home 默认使用 HTTP（非加密），局域网使用相对安全",
+                    "不同固件版本的 WebDAV 配置可能有差异",
+                    "根路径可能是 /、/Public 或其他，请根据实际情况调整",
+                    "端口通常是 80，但某些配置下可能使用其他端口"
+                ],
+                configSuggestTitle: "⚙️ 配置建议",
+                configSuggestions: [
+                    "确保设备和手机在同一局域网内",
+                    "如果连接失败，尝试以下根路径：/、/Public、/shares/Public",
+                    "检查设备固件是否为最新版本",
+                    "部分型号可能需要在设备设置中手动启用 WebDAV"
+                ],
+                refsTitle: "📚 官方参考",
+                refs: [
+                    { text: "📖 WD 支持中心", url: "https://support-en.wd.com/" },
+                    { text: "🏠 WD My Cloud 产品页", url: "https://www.westerndigital.com/products/cloud-storage" }
+                ]
+            },
+            ja: {
+                title: "WD My Cloud Home WebDAV 設定",
+                subtitle: "Western Digital パーソナルクラウドストレージデバイス",
+                configTitle: "📋 デフォルト設定リファレンス",
+                serverLabel: "サーバーアドレス（例）",
+                protocolLabel: "プロトコル",
+                pathLabel: "ルートパス（一般的）",
+                authLabel: "認証方式",
+                accountTitle: "🔑 アカウントと認証",
+                usernameLabel: "ユーザー名：",
+                usernameDesc: "My Cloud Home デバイスの管理者アカウント",
+                passwordLabel: "パスワード：",
+                passwordDesc: "デバイス管理者パスワード",
+                tipTitle: "💡 ヒント",
+                tipContent: "My Cloud Home の WebDAV 機能はデフォルトで有効になっていない場合があり、正確なサポートはファームウェアのバージョンによって異なります。",
+                howtoTitle: "🌐 デバイスアドレスの取得方法",
+                howtoSteps: [
+                    {
+                        title: "LAN 内：",
+                        items: [
+                            "デバイス名を使用：wdmycloudXXXXXX.local（XXXXXX はデバイス ID）",
+                            "または内部 IP を使用：ルーター管理インターフェースでデバイス IP を確認（例：192.168.1.x）"
+                        ]
+                    },
+                    {
+                        title: "My Cloud アプリ経由：",
+                        items: [
+                            "My Cloud Home モバイルアプリを開く",
+                            "デバイス設定でネットワーク情報を表示"
+                        ]
+                    }
+                ],
+                warningTitle: "⚠️ 注意事項",
+                warningItems: [
+                    "My Cloud Home はデフォルトで HTTP（暗号化なし）を使用、LAN 使用は比較的安全",
+                    "ファームウェアバージョンによって WebDAV 設定が異なる場合があります",
+                    "ルートパスは /、/Public、またはその他の可能性があります。実際の状況に応じて調整してください",
+                    "ポートは通常 80 ですが、一部の構成では他のポートを使用する場合があります"
+                ],
+                configSuggestTitle: "⚙️ 設定の推奨事項",
+                configSuggestions: [
+                    "デバイスとスマートフォンが同じ LAN 内にあることを確認",
+                    "接続に失敗した場合は、次のルートパスを試してください：/、/Public、/shares/Public",
+                    "デバイスファームウェアが最新バージョンであることを確認",
+                    "一部のモデルでは、デバイス設定で手動で WebDAV を有効にする必要がある場合があります"
+                ],
+                refsTitle: "📚 公式リファレンス",
+                refs: [
+                    { text: "📖 WD サポートセンター", url: "https://support-en.wd.com/" },
+                    { text: "🏠 WD My Cloud 製品ページ", url: "https://www.westerndigital.com/products/cloud-storage" }
+                ]
+            },
+            ru: {
+                title: "Настройка WD My Cloud Home WebDAV",
+                subtitle: "Персональное облачное хранилище Western Digital",
+                configTitle: "📋 Справочная конфигурация по умолчанию",
+                serverLabel: "Адрес сервера (пример)",
+                protocolLabel: "Протокол",
+                pathLabel: "Корневой путь (типичный)",
+                authLabel: "Аутентификация",
+                accountTitle: "🔑 Учетная запись и аутентификация",
+                usernameLabel: "Имя пользователя:",
+                usernameDesc: "Учетная запись администратора вашего устройства My Cloud Home",
+                passwordLabel: "Пароль:",
+                passwordDesc: "Пароль администратора устройства",
+                tipTitle: "💡 Совет",
+                tipContent: "Функция WebDAV в My Cloud Home может быть не включена по умолчанию, точная поддержка зависит от версии прошивки.",
+                howtoTitle: "🌐 Как получить адрес устройства",
+                howtoSteps: [
+                    {
+                        title: "В локальной сети:",
+                        items: [
+                            "Используйте имя устройства: wdmycloudXXXXXX.local (XXXXXX - это ID устройства)",
+                            "Или используйте внутренний IP: проверьте IP устройства в интерфейсе администратора маршрутизатора (например, 192.168.1.x)"
+                        ]
+                    },
+                    {
+                        title: "Через приложение My Cloud:",
+                        items: [
+                            "Откройте мобильное приложение My Cloud Home",
+                            "Просмотрите сетевую информацию в настройках устройства"
+                        ]
+                    }
+                ],
+                warningTitle: "⚠️ Примечания",
+                warningItems: [
+                    "My Cloud Home использует HTTP (незашифрованный) по умолчанию, относительно безопасно в локальной сети",
+                    "Конфигурация WebDAV может отличаться в разных версиях прошивки",
+                    "Корневой путь может быть /, /Public или другим, настройте по необходимости",
+                    "Порт обычно 80, но в некоторых конфигурациях может использоваться другой порт"
+                ],
+                configSuggestTitle: "⚙️ Рекомендации по настройке",
+                configSuggestions: [
+                    "Убедитесь, что устройство и телефон находятся в одной локальной сети",
+                    "Если подключение не удается, попробуйте следующие корневые пути: /, /Public, /shares/Public",
+                    "Проверьте, что прошивка устройства обновлена до последней версии",
+                    "Некоторым моделям может потребоваться вручную включить WebDAV в настройках устройства"
+                ],
+                refsTitle: "📚 Официальная справка",
+                refs: [
+                    { text: "📖 Центр поддержки WD", url: "https://support-en.wd.com/" },
+                    { text: "🏠 Страница продукта WD My Cloud", url: "https://www.westerndigital.com/products/cloud-storage" }
+                ]
+            }
+        };
+
+        function detectLanguage() {
+            const browserLang = navigator.language || navigator.userLanguage;
+            const langCode = browserLang.toLowerCase().split('-')[0];
+            return translations[langCode] ? langCode : 'en';
+        }
+
+        function switchLang(lang) {
+            const t = translations[lang];
+            if (!t) return;
+
+            document.documentElement.lang = lang;
+            document.getElementById('title').textContent = t.title;
+            document.getElementById('subtitle').textContent = t.subtitle;
+            document.getElementById('config-title').textContent = t.configTitle;
+            document.getElementById('server-label').textContent = t.serverLabel;
+            document.getElementById('protocol-label').textContent = t.protocolLabel;
+            document.getElementById('path-label').textContent = t.pathLabel;
+            document.getElementById('auth-label').textContent = t.authLabel;
+            document.getElementById('account-title').textContent = t.accountTitle;
+            document.getElementById('username-label').textContent = t.usernameLabel;
+            document.getElementById('username-desc').textContent = t.usernameDesc;
+            document.getElementById('password-label').textContent = t.passwordLabel;
+            document.getElementById('password-desc').textContent = t.passwordDesc;
+            document.getElementById('tip-title').textContent = t.tipTitle;
+            document.getElementById('tip-content').textContent = t.tipContent;
+            document.getElementById('howto-title').textContent = t.howtoTitle;
+            document.getElementById('warning-title').textContent = t.warningTitle;
+            document.getElementById('config-suggest-title').textContent = t.configSuggestTitle;
+            document.getElementById('refs-title').textContent = t.refsTitle;
+
+            const howtoList = document.getElementById('howto-list');
+            howtoList.innerHTML = '';
+            t.howtoSteps.forEach(step => {
+                const li = document.createElement('li');
+                li.innerHTML = `<strong>${step.title}</strong>`;
+                const ul = document.createElement('ul');
+                ul.style.paddingLeft = '20px';
+                ul.style.marginTop = '4px';
+                step.items.forEach(item => {
+                    const subLi = document.createElement('li');
+                    subLi.textContent = item;
+                    ul.appendChild(subLi);
+                });
+                li.appendChild(ul);
+                howtoList.appendChild(li);
+            });
+
+            const warningList = document.getElementById('warning-list');
+            warningList.innerHTML = '';
+            t.warningItems.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                warningList.appendChild(li);
+            });
+
+            const configSuggestList = document.getElementById('config-suggest-list');
+            configSuggestList.innerHTML = '';
+            t.configSuggestions.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                configSuggestList.appendChild(li);
+            });
+
+            const refsList = document.getElementById('refs-list');
+            refsList.innerHTML = '';
+            t.refs.forEach(ref => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = ref.url;
+                a.target = '_blank';
+                a.textContent = ref.text;
+                li.appendChild(a);
+                refsList.appendChild(li);
+            });
+
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            localStorage.setItem('preferredLanguage', lang);
+        }
+
+        window.onload = function() {
+            const savedLang = localStorage.getItem('preferredLanguage') || detectLanguage();
+            switchLang(savedLang);
+            document.querySelector(`[onclick="switchLang('${savedLang}')"]`).classList.add('active');
+        };
+    </script>
 </body>
 </html>

@@ -1,175 +1,314 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>4Shared WebDAV 配置说明</title>
+    <title>4Shared WebDAV Configuration</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans CJK SC", sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f5f5f5;
-            padding: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans CJK SC", "Noto Sans CJK JP", sans-serif;
+            line-height: 1.6; color: #333; background: #f5f5f5; padding: 16px;
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
+        .container { max-width: 800px; margin: 0 auto; }
         .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 24px 20px;
-            border-radius: 12px;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            color: white; padding: 24px 20px; border-radius: 12px; margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15); position: relative;
         }
-        h1 {
-            font-size: 1.8rem;
-            margin-bottom: 8px;
+        .lang-switcher { position: absolute; top: 12px; right: 12px; display: flex; gap: 8px; }
+        .lang-btn {
+            background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3);
+            color: white; padding: 4px 10px; border-radius: 6px; cursor: pointer;
+            font-size: 0.85rem; transition: all 0.3s;
         }
-        .subtitle {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
+        .lang-btn:hover { background: rgba(255,255,255,0.3); }
+        .lang-btn.active { background: rgba(255,255,255,0.9); color: #667eea; font-weight: 600; }
+        h1 { font-size: 1.8rem; margin-bottom: 8px; }
+        .subtitle { font-size: 1rem; opacity: 0.9; }
         .card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background: white; border-radius: 12px; padding: 20px;
+            margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         h2 {
-            color: #667eea;
-            font-size: 1.3rem;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #667eea;
+            color: #667eea; font-size: 1.3rem; margin-bottom: 12px;
+            padding-bottom: 8px; border-bottom: 2px solid #667eea;
         }
         .info-item {
-            margin-bottom: 12px;
-            padding: 12px;
-            background: #f8f9ff;
-            border-left: 4px solid #667eea;
-            border-radius: 4px;
+            margin-bottom: 12px; padding: 12px; background: #f8f9ff;
+            border-left: 4px solid #667eea; border-radius: 4px;
         }
-        .info-label {
-            font-weight: 600;
-            color: #667eea;
-            margin-bottom: 4px;
-        }
+        .info-label { font-weight: 600; color: #667eea; margin-bottom: 4px; }
         .info-value {
             font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Courier New', monospace;
-            color: #333;
-            word-break: break-all;
+            color: #333; word-break: break-all;
         }
         .warning {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 12px;
-            border-radius: 4px;
-            margin-top: 12px;
+            background: #fff3cd; border-left: 4px solid #ffc107;
+            padding: 12px; border-radius: 4px; margin-top: 12px;
         }
         .tip {
-            background: #e7f3ff;
-            border-left: 4px solid #2196F3;
-            padding: 12px;
-            border-radius: 4px;
-            margin-top: 12px;
+            background: #e7f3ff; border-left: 4px solid #2196F3;
+            padding: 12px; border-radius: 4px; margin-top: 12px;
         }
-        .link-list {
-            list-style: none;
-            padding-left: 0;
-        }
-        .link-list li {
-            margin-bottom: 8px;
-        }
-        .link-list a {
-            color: #667eea;
-            text-decoration: none;
-            word-break: break-all;
-        }
-        .link-list a:hover {
-            text-decoration: underline;
-        }
+        .link-list { list-style: none; padding-left: 0; }
+        .link-list li { margin-bottom: 8px; }
+        .link-list a { color: #667eea; text-decoration: none; word-break: break-all; }
+        .link-list a:hover { text-decoration: underline; }
+        ol, ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
         @media (max-width: 480px) {
-            body {
-                padding: 12px;
-            }
-            h1 {
-                font-size: 1.5rem;
-            }
-            .card {
-                padding: 16px;
-            }
+            body { padding: 12px; }
+            h1 { font-size: 1.5rem; }
+            .card { padding: 16px; }
+            .lang-switcher { position: static; margin-top: 12px; justify-content: center; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>4Shared WebDAV 配置</h1>
-            <p class="subtitle">文件存储与共享服务</p>
+            <div class="lang-switcher">
+                <button class="lang-btn" onclick="switchLang('en')">EN</button>
+                <button class="lang-btn" onclick="switchLang('zh')">中文</button>
+                <button class="lang-btn" onclick="switchLang('ja')">日本語</button>
+                <button class="lang-btn" onclick="switchLang('ru')">RU</button>
+            </div>
+            <h1 id="title"></h1>
+            <p class="subtitle" id="subtitle"></p>
         </div>
 
         <div class="card">
-            <h2>📋 默认配置</h2>
+            <h2 id="config-title"></h2>
             <div class="info-item">
-                <div class="info-label">服务器地址</div>
+                <div class="info-label" id="server-label"></div>
                 <div class="info-value">webdav.4shared.com</div>
             </div>
             <div class="info-item">
-                <div class="info-label">协议</div>
-                <div class="info-value">HTTPS (端口 443)</div>
+                <div class="info-label" id="protocol-label"></div>
+                <div class="info-value">HTTPS (443)</div>
             </div>
             <div class="info-item">
-                <div class="info-label">根路径</div>
+                <div class="info-label" id="path-label"></div>
                 <div class="info-value">/</div>
             </div>
             <div class="info-item">
-                <div class="info-label">认证方式</div>
+                <div class="info-label" id="auth-label"></div>
                 <div class="info-value">Basic Authentication</div>
             </div>
         </div>
 
         <div class="card">
-            <h2>🔑 账号与认证</h2>
-            <p><strong>用户名：</strong>您的 4Shared 账户用户名或邮箱</p>
-            <p style="margin-top: 8px;"><strong>密码：</strong>您的 4Shared 账户密码</p>
+            <h2 id="account-title"></h2>
+            <p><strong id="username-label"></strong> <span id="username-desc"></span></p>
+            <p style="margin-top: 8px;"><strong id="password-label"></strong> <span id="password-desc"></span></p>
             
             <div class="warning">
-                <strong>⚠️ 重要提示</strong>
-                <p style="margin-top: 4px;">4Shared 的 WebDAV 功能通常仅对付费高级会员（Premium）开放。免费账户可能无法使用 WebDAV。</p>
+                <strong id="warning-title"></strong>
+                <p style="margin-top: 4px;" id="warning-content"></p>
             </div>
         </div>
 
         <div class="card">
-            <h2>⚙️ 使用说明</h2>
-            <ul style="padding-left: 20px;">
-                <li><strong>账户类型：</strong>确认您的账户是 Premium 或支持 WebDAV 的付费计划</li>
-                <li><strong>服务器地址：</strong>使用 <code>webdav.4shared.com</code></li>
-                <li><strong>连接安全：</strong>必须使用 HTTPS 协议</li>
-                <li><strong>文件访问：</strong>可访问您的所有上传文件和文件夹</li>
-            </ul>
+            <h2 id="usage-title"></h2>
+            <ul id="usage-list"></ul>
             
             <div class="tip">
-                <strong>💡 提示</strong>
-                <p style="margin-top: 4px;">如果遇到连接问题，请先在 4Shared 网站确认您的账户类型和 WebDAV 权限。</p>
+                <strong id="tip-title"></strong>
+                <p style="margin-top: 4px;" id="tip-content"></p>
             </div>
         </div>
 
         <div class="card">
-            <h2>📚 官方参考</h2>
-            <ul class="link-list">
-                <li>📖 <a href="https://www.4shared.com/faq.jsp" target="_blank">4Shared 常见问题</a></li>
-                <li>🏠 <a href="https://www.4shared.com/" target="_blank">4Shared 官网</a></li>
-            </ul>
+            <h2 id="refs-title"></h2>
+            <ul class="link-list" id="refs-list"></ul>
         </div>
     </div>
+
+    <script>
+        const translations = {
+            en: {
+                title: "4Shared WebDAV Configuration",
+                subtitle: "File storage and sharing service",
+                configTitle: "📋 Default Configuration",
+                serverLabel: "Server Address",
+                protocolLabel: "Protocol",
+                pathLabel: "Root Path",
+                authLabel: "Authentication",
+                accountTitle: "🔑 Account & Authentication",
+                usernameLabel: "Username:",
+                usernameDesc: "Your 4Shared username or email",
+                passwordLabel: "Password:",
+                passwordDesc: "Your 4Shared account password",
+                warningTitle: "⚠️ Important Note",
+                warningContent: "4Shared WebDAV functionality is typically available only for Premium (paid) members. Free accounts may not be able to use WebDAV.",
+                usageTitle: "⚙️ Usage Instructions",
+                usageItems: [
+                    "Account Type: Confirm your account is Premium or has WebDAV support plan",
+                    "Server Address: Use webdav.4shared.com",
+                    "Connection Security: Must use HTTPS protocol",
+                    "File Access: Can access all your uploaded files and folders"
+                ],
+                tipTitle: "💡 Tip",
+                tipContent: "If you encounter connection issues, please first confirm your account type and WebDAV permissions on the 4Shared website.",
+                refsTitle: "📚 Official Reference",
+                refs: [
+                    { text: "📖 4Shared FAQ", url: "https://www.4shared.com/faq.jsp" },
+                    { text: "🏠 4Shared Official Site", url: "https://www.4shared.com/" }
+                ]
+            },
+            zh: {
+                title: "4Shared WebDAV 配置",
+                subtitle: "文件存储与共享服务",
+                configTitle: "📋 默认配置",
+                serverLabel: "服务器地址",
+                protocolLabel: "协议",
+                pathLabel: "根路径",
+                authLabel: "认证方式",
+                accountTitle: "🔑 账号与认证",
+                usernameLabel: "用户名：",
+                usernameDesc: "您的 4Shared 账户用户名或邮箱",
+                passwordLabel: "密码：",
+                passwordDesc: "您的 4Shared 账户密码",
+                warningTitle: "⚠️ 重要提示",
+                warningContent: "4Shared 的 WebDAV 功能通常仅对付费高级会员（Premium）开放。免费账户可能无法使用 WebDAV。",
+                usageTitle: "⚙️ 使用说明",
+                usageItems: [
+                    "账户类型：确认您的账户是 Premium 或支持 WebDAV 的付费计划",
+                    "服务器地址：使用 webdav.4shared.com",
+                    "连接安全：必须使用 HTTPS 协议",
+                    "文件访问：可访问您的所有上传文件和文件夹"
+                ],
+                tipTitle: "💡 提示",
+                tipContent: "如果遇到连接问题，请先在 4Shared 网站确认您的账户类型和 WebDAV 权限。",
+                refsTitle: "📚 官方参考",
+                refs: [
+                    { text: "📖 4Shared 常见问题", url: "https://www.4shared.com/faq.jsp" },
+                    { text: "🏠 4Shared 官网", url: "https://www.4shared.com/" }
+                ]
+            },
+            ja: {
+                title: "4Shared WebDAV 設定",
+                subtitle: "ファイルストレージと共有サービス",
+                configTitle: "📋 デフォルト設定",
+                serverLabel: "サーバーアドレス",
+                protocolLabel: "プロトコル",
+                pathLabel: "ルートパス",
+                authLabel: "認証方式",
+                accountTitle: "🔑 アカウントと認証",
+                usernameLabel: "ユーザー名：",
+                usernameDesc: "4Shared ユーザー名またはメールアドレス",
+                passwordLabel: "パスワード：",
+                passwordDesc: "4Shared アカウントパスワード",
+                warningTitle: "⚠️ 重要な注意",
+                warningContent: "4Shared の WebDAV 機能は通常、有料プレミアムメンバー専用です。無料アカウントでは WebDAV を使用できない場合があります。",
+                usageTitle: "⚙️ 使用手順",
+                usageItems: [
+                    "アカウントタイプ：アカウントが Premium または WebDAV サポートプランであることを確認",
+                    "サーバーアドレス：webdav.4shared.com を使用",
+                    "接続のセキュリティ：HTTPS プロトコルを使用する必要があります",
+                    "ファイルアクセス：アップロードしたすべてのファイルとフォルダーにアクセス可能"
+                ],
+                tipTitle: "💡 ヒント",
+                tipContent: "接続の問題が発生した場合は、まず 4Shared ウェブサイトでアカウントタイプと WebDAV 権限を確認してください。",
+                refsTitle: "📚 公式リファレンス",
+                refs: [
+                    { text: "📖 4Shared FAQ", url: "https://www.4shared.com/faq.jsp" },
+                    { text: "🏠 4Shared 公式サイト", url: "https://www.4shared.com/" }
+                ]
+            },
+            ru: {
+                title: "Настройка 4Shared WebDAV",
+                subtitle: "Служба хранения и обмена файлами",
+                configTitle: "📋 Конфигурация по умолчанию",
+                serverLabel: "Адрес сервера",
+                protocolLabel: "Протокол",
+                pathLabel: "Корневой путь",
+                authLabel: "Аутентификация",
+                accountTitle: "🔑 Учетная запись и аутентификация",
+                usernameLabel: "Имя пользователя:",
+                usernameDesc: "Ваше имя пользователя или email 4Shared",
+                passwordLabel: "Пароль:",
+                passwordDesc: "Пароль вашей учетной записи 4Shared",
+                warningTitle: "⚠️ Важное примечание",
+                warningContent: "Функция WebDAV в 4Shared обычно доступна только для платных премиум-членов. Бесплатные учетные записи могут не иметь доступа к WebDAV.",
+                usageTitle: "⚙️ Инструкции по использованию",
+                usageItems: [
+                    "Тип учетной записи: Убедитесь, что ваша учетная запись Premium или имеет план с поддержкой WebDAV",
+                    "Адрес сервера: Используйте webdav.4shared.com",
+                    "Безопасность соединения: Необходимо использовать протокол HTTPS",
+                    "Доступ к файлам: Можно получить доступ ко всем загруженным файлам и папкам"
+                ],
+                tipTitle: "💡 Совет",
+                tipContent: "Если возникают проблемы с подключением, сначала подтвердите тип вашей учетной записи и разрешения WebDAV на веб-сайте 4Shared.",
+                refsTitle: "📚 Официальная справка",
+                refs: [
+                    { text: "📖 4Shared FAQ", url: "https://www.4shared.com/faq.jsp" },
+                    { text: "🏠 Официальный сайт 4Shared", url: "https://www.4shared.com/" }
+                ]
+            }
+        };
+
+        function detectLanguage() {
+            const browserLang = navigator.language || navigator.userLanguage;
+            const langCode = browserLang.toLowerCase().split('-')[0];
+            return translations[langCode] ? langCode : 'en';
+        }
+
+        function switchLang(lang) {
+            const t = translations[lang];
+            if (!t) return;
+
+            document.documentElement.lang = lang;
+            document.getElementById('title').textContent = t.title;
+            document.getElementById('subtitle').textContent = t.subtitle;
+            document.getElementById('config-title').textContent = t.configTitle;
+            document.getElementById('server-label').textContent = t.serverLabel;
+            document.getElementById('protocol-label').textContent = t.protocolLabel;
+            document.getElementById('path-label').textContent = t.pathLabel;
+            document.getElementById('auth-label').textContent = t.authLabel;
+            document.getElementById('account-title').textContent = t.accountTitle;
+            document.getElementById('username-label').textContent = t.usernameLabel;
+            document.getElementById('username-desc').textContent = t.usernameDesc;
+            document.getElementById('password-label').textContent = t.passwordLabel;
+            document.getElementById('password-desc').textContent = t.passwordDesc;
+            document.getElementById('warning-title').textContent = t.warningTitle;
+            document.getElementById('warning-content').textContent = t.warningContent;
+            document.getElementById('usage-title').textContent = t.usageTitle;
+            document.getElementById('tip-title').textContent = t.tipTitle;
+            document.getElementById('tip-content').textContent = t.tipContent;
+            document.getElementById('refs-title').textContent = t.refsTitle;
+
+            const usageList = document.getElementById('usage-list');
+            usageList.innerHTML = '';
+            t.usageItems.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                usageList.appendChild(li);
+            });
+
+            const refsList = document.getElementById('refs-list');
+            refsList.innerHTML = '';
+            t.refs.forEach(ref => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = ref.url;
+                a.target = '_blank';
+                a.textContent = ref.text;
+                li.appendChild(a);
+                refsList.appendChild(li);
+            });
+
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            localStorage.setItem('preferredLanguage', lang);
+        }
+
+        window.onload = function() {
+            const savedLang = localStorage.getItem('preferredLanguage') || detectLanguage();
+            switchLang(savedLang);
+            document.querySelector(`[onclick="switchLang('${savedLang}')"]`).classList.add('active');
+        };
+    </script>
 </body>
 </html>

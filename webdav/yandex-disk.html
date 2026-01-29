@@ -1,176 +1,318 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yandex.Disk WebDAV 配置说明</title>
+    <title>Yandex.Disk WebDAV Configuration</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans CJK SC", sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f5f5f5;
-            padding: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans CJK SC", "Noto Sans CJK JP", sans-serif;
+            line-height: 1.6; color: #333; background: #f5f5f5; padding: 16px;
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
+        .container { max-width: 800px; margin: 0 auto; }
         .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 24px 20px;
-            border-radius: 12px;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            color: white; padding: 24px 20px; border-radius: 12px; margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15); position: relative;
         }
-        h1 {
-            font-size: 1.8rem;
-            margin-bottom: 8px;
+        .lang-switcher { position: absolute; top: 12px; right: 12px; display: flex; gap: 8px; }
+        .lang-btn {
+            background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3);
+            color: white; padding: 4px 10px; border-radius: 6px; cursor: pointer;
+            font-size: 0.85rem; transition: all 0.3s;
         }
-        .subtitle {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
+        .lang-btn:hover { background: rgba(255,255,255,0.3); }
+        .lang-btn.active { background: rgba(255,255,255,0.9); color: #667eea; font-weight: 600; }
+        h1 { font-size: 1.8rem; margin-bottom: 8px; }
+        .subtitle { font-size: 1rem; opacity: 0.9; }
         .card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background: white; border-radius: 12px; padding: 20px;
+            margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         h2 {
-            color: #667eea;
-            font-size: 1.3rem;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #667eea;
+            color: #667eea; font-size: 1.3rem; margin-bottom: 12px;
+            padding-bottom: 8px; border-bottom: 2px solid #667eea;
         }
         .info-item {
-            margin-bottom: 12px;
-            padding: 12px;
-            background: #f8f9ff;
-            border-left: 4px solid #667eea;
-            border-radius: 4px;
+            margin-bottom: 12px; padding: 12px; background: #f8f9ff;
+            border-left: 4px solid #667eea; border-radius: 4px;
         }
-        .info-label {
-            font-weight: 600;
-            color: #667eea;
-            margin-bottom: 4px;
-        }
+        .info-label { font-weight: 600; color: #667eea; margin-bottom: 4px; }
         .info-value {
             font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Courier New', monospace;
-            color: #333;
-            word-break: break-all;
+            color: #333; word-break: break-all;
         }
         .warning {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 12px;
-            border-radius: 4px;
-            margin-top: 12px;
+            background: #fff3cd; border-left: 4px solid #ffc107;
+            padding: 12px; border-radius: 4px; margin-top: 12px;
         }
         .tip {
-            background: #e7f3ff;
-            border-left: 4px solid #2196F3;
-            padding: 12px;
-            border-radius: 4px;
-            margin-top: 12px;
+            background: #e7f3ff; border-left: 4px solid #2196F3;
+            padding: 12px; border-radius: 4px; margin-top: 12px;
         }
-        .link-list {
-            list-style: none;
-            padding-left: 0;
-        }
-        .link-list li {
-            margin-bottom: 8px;
-        }
-        .link-list a {
-            color: #667eea;
-            text-decoration: none;
-            word-break: break-all;
-        }
-        .link-list a:hover {
-            text-decoration: underline;
-        }
+        .link-list { list-style: none; padding-left: 0; }
+        .link-list li { margin-bottom: 8px; }
+        .link-list a { color: #667eea; text-decoration: none; word-break: break-all; }
+        .link-list a:hover { text-decoration: underline; }
+        ol, ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
         @media (max-width: 480px) {
-            body {
-                padding: 12px;
-            }
-            h1 {
-                font-size: 1.5rem;
-            }
-            .card {
-                padding: 16px;
-            }
+            body { padding: 12px; }
+            h1 { font-size: 1.5rem; }
+            .card { padding: 16px; }
+            .lang-switcher { position: static; margin-top: 12px; justify-content: center; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>Yandex.Disk WebDAV 配置</h1>
-            <p class="subtitle">Yandex 提供的云存储服务</p>
+            <div class="lang-switcher">
+                <button class="lang-btn" onclick="switchLang('en')">EN</button>
+                <button class="lang-btn" onclick="switchLang('zh')">中文</button>
+                <button class="lang-btn" onclick="switchLang('ja')">日本語</button>
+                <button class="lang-btn" onclick="switchLang('ru')">RU</button>
+            </div>
+            <h1 id="title"></h1>
+            <p class="subtitle" id="subtitle"></p>
         </div>
 
         <div class="card">
-            <h2>📋 默认配置</h2>
+            <h2 id="config-title"></h2>
             <div class="info-item">
-                <div class="info-label">服务器地址</div>
+                <div class="info-label" id="server-label"></div>
                 <div class="info-value">webdav.yandex.com</div>
             </div>
             <div class="info-item">
-                <div class="info-label">协议</div>
-                <div class="info-value">HTTPS (端口 443)</div>
+                <div class="info-label" id="protocol-label"></div>
+                <div class="info-value">HTTPS (443)</div>
             </div>
             <div class="info-item">
-                <div class="info-label">根路径</div>
+                <div class="info-label" id="path-label"></div>
                 <div class="info-value">/</div>
             </div>
             <div class="info-item">
-                <div class="info-label">认证方式</div>
+                <div class="info-label" id="auth-label"></div>
                 <div class="info-value">Basic Authentication</div>
             </div>
         </div>
 
         <div class="card">
-            <h2>🔑 账号与认证</h2>
-            <p><strong>用户名：</strong>您的 Yandex 账户邮箱或用户名</p>
-            <p style="margin-top: 8px;"><strong>密码：</strong>建议使用应用专用密码</p>
+            <h2 id="account-title"></h2>
+            <p><strong id="username-label"></strong> <span id="username-desc"></span></p>
+            <p style="margin-top: 8px;"><strong id="password-label"></strong> <span id="password-desc"></span></p>
             
             <div class="tip">
-                <strong>💡 推荐做法</strong>
-                <p style="margin-top: 4px;">为了安全，建议在 Yandex 账户设置中生成应用专用密码，而不是使用主密码。</p>
+                <strong id="tip-title"></strong>
+                <p style="margin-top: 4px;" id="tip-content"></p>
             </div>
         </div>
 
         <div class="card">
-            <h2>🔐 如何生成应用专用密码</h2>
-            <ol style="padding-left: 20px;">
-                <li>登录 Yandex 账户</li>
-                <li>进入账户安全设置</li>
-                <li>找到"应用密码"或"App passwords"选项</li>
-                <li>为 WebDAV 创建新的应用密码</li>
-                <li>将生成的密码填入本应用</li>
-            </ol>
+            <h2 id="howto-title"></h2>
+            <ol id="howto-list"></ol>
             
             <div class="warning">
-                <strong>⚠️ 注意</strong>
-                <p style="margin-top: 4px;">应用专用密码只显示一次，请妥善保存。如果启用了两步验证，则必须使用应用专用密码。</p>
+                <strong id="warning-title"></strong>
+                <p style="margin-top: 4px;" id="warning-content"></p>
             </div>
         </div>
 
         <div class="card">
-            <h2>📚 官方参考</h2>
-            <ul class="link-list">
-                <li>📖 <a href="https://yandex.com/support/disk-app-classic/webdav.html" target="_blank">Yandex.Disk WebDAV 说明</a></li>
-                <li>🏠 <a href="https://disk.yandex.com/" target="_blank">Yandex.Disk 官网</a></li>
-            </ul>
+            <h2 id="refs-title"></h2>
+            <ul class="link-list" id="refs-list"></ul>
         </div>
     </div>
+
+    <script>
+        const translations = {
+            en: {
+                title: "Yandex.Disk WebDAV Configuration",
+                subtitle: "Cloud storage service by Yandex",
+                configTitle: "📋 Default Configuration",
+                serverLabel: "Server Address",
+                protocolLabel: "Protocol",
+                pathLabel: "Root Path",
+                authLabel: "Authentication",
+                accountTitle: "🔑 Account & Authentication",
+                usernameLabel: "Username:",
+                usernameDesc: "Your Yandex account email or username",
+                passwordLabel: "Password:",
+                passwordDesc: "App-specific password recommended",
+                tipTitle: "💡 Recommended Practice",
+                tipContent: "For security, it's recommended to generate an app-specific password in Yandex account settings instead of using your main password.",
+                howtoTitle: "🔐 How to Generate App-Specific Password",
+                howtoSteps: [
+                    "Log in to your Yandex account",
+                    "Go to account security settings",
+                    "Find 'App passwords' option",
+                    "Create a new app password for WebDAV",
+                    "Enter the generated password in this app"
+                ],
+                warningTitle: "⚠️ Note",
+                warningContent: "App-specific passwords are shown only once, please save them carefully. If two-factor authentication is enabled, you must use an app-specific password.",
+                refsTitle: "📚 Official Reference",
+                refs: [
+                    { text: "📖 Yandex.Disk WebDAV Documentation", url: "https://yandex.com/support/disk-app-classic/webdav.html" },
+                    { text: "🏠 Yandex.Disk Official Site", url: "https://disk.yandex.com/" }
+                ]
+            },
+            zh: {
+                title: "Yandex.Disk WebDAV 配置",
+                subtitle: "Yandex 提供的云存储服务",
+                configTitle: "📋 默认配置",
+                serverLabel: "服务器地址",
+                protocolLabel: "协议",
+                pathLabel: "根路径",
+                authLabel: "认证方式",
+                accountTitle: "🔑 账号与认证",
+                usernameLabel: "用户名：",
+                usernameDesc: "您的 Yandex 账户邮箱或用户名",
+                passwordLabel: "密码：",
+                passwordDesc: "建议使用应用专用密码",
+                tipTitle: "💡 推荐做法",
+                tipContent: "为了安全，建议在 Yandex 账户设置中生成应用专用密码，而不是使用主密码。",
+                howtoTitle: "🔐 如何生成应用专用密码",
+                howtoSteps: [
+                    "登录 Yandex 账户",
+                    "进入账户安全设置",
+                    "找到"应用密码"或"App passwords"选项",
+                    "为 WebDAV 创建新的应用密码",
+                    "将生成的密码填入本应用"
+                ],
+                warningTitle: "⚠️ 注意",
+                warningContent: "应用专用密码只显示一次，请妥善保存。如果启用了两步验证，则必须使用应用专用密码。",
+                refsTitle: "📚 官方参考",
+                refs: [
+                    { text: "📖 Yandex.Disk WebDAV 说明", url: "https://yandex.com/support/disk-app-classic/webdav.html" },
+                    { text: "🏠 Yandex.Disk 官网", url: "https://disk.yandex.com/" }
+                ]
+            },
+            ja: {
+                title: "Yandex.Disk WebDAV 設定",
+                subtitle: "Yandex が提供するクラウドストレージサービス",
+                configTitle: "📋 デフォルト設定",
+                serverLabel: "サーバーアドレス",
+                protocolLabel: "プロトコル",
+                pathLabel: "ルートパス",
+                authLabel: "認証方式",
+                accountTitle: "🔑 アカウントと認証",
+                usernameLabel: "ユーザー名：",
+                usernameDesc: "Yandex アカウントのメールアドレスまたはユーザー名",
+                passwordLabel: "パスワード：",
+                passwordDesc: "アプリ専用パスワードの使用を推奨",
+                tipTitle: "💡 推奨される方法",
+                tipContent: "セキュリティのため、メインパスワードの代わりに、Yandex アカウント設定でアプリ専用パスワードを生成することをお勧めします。",
+                howtoTitle: "🔐 アプリ専用パスワードの生成方法",
+                howtoSteps: [
+                    "Yandex アカウントにログイン",
+                    "アカウントセキュリティ設定に移動",
+                    "「アプリパスワード」オプションを検索",
+                    "WebDAV 用の新しいアプリパスワードを作成",
+                    "生成されたパスワードをこのアプリに入力"
+                ],
+                warningTitle: "⚠️ 注意",
+                warningContent: "アプリ専用パスワードは一度だけ表示されます。慎重に保存してください。二要素認証が有効になっている場合は、アプリ専用パスワードを使用する必要があります。",
+                refsTitle: "📚 公式リファレンス",
+                refs: [
+                    { text: "📖 Yandex.Disk WebDAV ドキュメント", url: "https://yandex.com/support/disk-app-classic/webdav.html" },
+                    { text: "🏠 Yandex.Disk 公式サイト", url: "https://disk.yandex.com/" }
+                ]
+            },
+            ru: {
+                title: "Настройка Yandex.Disk WebDAV",
+                subtitle: "Облачное хранилище от Yandex",
+                configTitle: "📋 Конфигурация по умолчанию",
+                serverLabel: "Адрес сервера",
+                protocolLabel: "Протокол",
+                pathLabel: "Корневой путь",
+                authLabel: "Аутентификация",
+                accountTitle: "🔑 Учетная запись и аутентификация",
+                usernameLabel: "Имя пользователя:",
+                usernameDesc: "Ваш email или имя пользователя Yandex",
+                passwordLabel: "Пароль:",
+                passwordDesc: "Рекомендуется использовать пароль приложения",
+                tipTitle: "💡 Рекомендуемая практика",
+                tipContent: "Для безопасности рекомендуется создать пароль приложения в настройках учетной записи Yandex вместо использования основного пароля.",
+                howtoTitle: "🔐 Как создать пароль приложения",
+                howtoSteps: [
+                    "Войдите в учетную запись Yandex",
+                    "Перейдите в настройки безопасности учетной записи",
+                    "Найдите опцию 'Пароли приложений'",
+                    "Создайте новый пароль приложения для WebDAV",
+                    "Введите сгенерированный пароль в это приложение"
+                ],
+                warningTitle: "⚠️ Примечание",
+                warningContent: "Пароли приложений показываются только один раз, пожалуйста, сохраните их. Если включена двухфакторная аутентификация, необходимо использовать пароль приложения.",
+                refsTitle: "📚 Официальная справка",
+                refs: [
+                    { text: "📖 Документация Yandex.Disk WebDAV", url: "https://yandex.com/support/disk-app-classic/webdav.html" },
+                    { text: "🏠 Официальный сайт Yandex.Disk", url: "https://disk.yandex.com/" }
+                ]
+            }
+        };
+
+        function detectLanguage() {
+            const browserLang = navigator.language || navigator.userLanguage;
+            const langCode = browserLang.toLowerCase().split('-')[0];
+            return translations[langCode] ? langCode : 'en';
+        }
+
+        function switchLang(lang) {
+            const t = translations[lang];
+            if (!t) return;
+
+            document.documentElement.lang = lang;
+            document.getElementById('title').textContent = t.title;
+            document.getElementById('subtitle').textContent = t.subtitle;
+            document.getElementById('config-title').textContent = t.configTitle;
+            document.getElementById('server-label').textContent = t.serverLabel;
+            document.getElementById('protocol-label').textContent = t.protocolLabel;
+            document.getElementById('path-label').textContent = t.pathLabel;
+            document.getElementById('auth-label').textContent = t.authLabel;
+            document.getElementById('account-title').textContent = t.accountTitle;
+            document.getElementById('username-label').textContent = t.usernameLabel;
+            document.getElementById('username-desc').textContent = t.usernameDesc;
+            document.getElementById('password-label').textContent = t.passwordLabel;
+            document.getElementById('password-desc').textContent = t.passwordDesc;
+            document.getElementById('tip-title').textContent = t.tipTitle;
+            document.getElementById('tip-content').textContent = t.tipContent;
+            document.getElementById('howto-title').textContent = t.howtoTitle;
+            document.getElementById('warning-title').textContent = t.warningTitle;
+            document.getElementById('warning-content').textContent = t.warningContent;
+            document.getElementById('refs-title').textContent = t.refsTitle;
+
+            const howtoList = document.getElementById('howto-list');
+            howtoList.innerHTML = '';
+            t.howtoSteps.forEach(step => {
+                const li = document.createElement('li');
+                li.textContent = step;
+                howtoList.appendChild(li);
+            });
+
+            const refsList = document.getElementById('refs-list');
+            refsList.innerHTML = '';
+            t.refs.forEach(ref => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = ref.url;
+                a.target = '_blank';
+                a.textContent = ref.text;
+                li.appendChild(a);
+                refsList.appendChild(li);
+            });
+
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            localStorage.setItem('preferredLanguage', lang);
+        }
+
+        window.onload = function() {
+            const savedLang = localStorage.getItem('preferredLanguage') || detectLanguage();
+            switchLang(savedLang);
+            document.querySelector(`[onclick="switchLang('${savedLang}')"]`).classList.add('active');
+        };
+    </script>
 </body>
 </html>

@@ -1,233 +1,637 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>自定义 WebDAV 配置说明</title>
+    <title>Custom WebDAV Configuration</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans CJK SC", sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f5f5f5;
-            padding: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans CJK SC", "Noto Sans CJK JP", sans-serif;
+            line-height: 1.6; color: #333; background: #f5f5f5; padding: 16px;
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
+        .container { max-width: 800px; margin: 0 auto; }
         .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 24px 20px;
-            border-radius: 12px;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            color: white; padding: 24px 20px; border-radius: 12px; margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15); position: relative;
         }
-        h1 {
-            font-size: 1.8rem;
-            margin-bottom: 8px;
+        .lang-switcher { position: absolute; top: 12px; right: 12px; display: flex; gap: 8px; }
+        .lang-btn {
+            background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3);
+            color: white; padding: 4px 10px; border-radius: 6px; cursor: pointer;
+            font-size: 0.85rem; transition: all 0.3s;
         }
-        .subtitle {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
+        .lang-btn:hover { background: rgba(255,255,255,0.3); }
+        .lang-btn.active { background: rgba(255,255,255,0.9); color: #667eea; font-weight: 600; }
+        h1 { font-size: 1.8rem; margin-bottom: 8px; }
+        .subtitle { font-size: 1rem; opacity: 0.9; }
         .card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background: white; border-radius: 12px; padding: 20px;
+            margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         h2 {
-            color: #667eea;
-            font-size: 1.3rem;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #667eea;
+            color: #667eea; font-size: 1.3rem; margin-bottom: 12px;
+            padding-bottom: 8px; border-bottom: 2px solid #667eea;
         }
+        h3 { font-size: 1.1rem; margin-top: 16px; margin-bottom: 8px; color: #667eea; }
         .info-item {
-            margin-bottom: 12px;
-            padding: 12px;
-            background: #f8f9ff;
-            border-left: 4px solid #667eea;
-            border-radius: 4px;
+            margin-bottom: 12px; padding: 12px; background: #f8f9ff;
+            border-left: 4px solid #667eea; border-radius: 4px;
         }
-        .info-label {
-            font-weight: 600;
-            color: #667eea;
-            margin-bottom: 4px;
-        }
+        .info-label { font-weight: 600; color: #667eea; margin-bottom: 4px; }
         .info-value {
             font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Courier New', monospace;
-            color: #333;
-            word-break: break-all;
+            color: #333; word-break: break-all;
         }
         .warning {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 12px;
-            border-radius: 4px;
-            margin-top: 12px;
+            background: #fff3cd; border-left: 4px solid #ffc107;
+            padding: 12px; border-radius: 4px; margin-top: 12px;
         }
         .tip {
-            background: #e7f3ff;
-            border-left: 4px solid #2196F3;
-            padding: 12px;
-            border-radius: 4px;
-            margin-top: 12px;
+            background: #e7f3ff; border-left: 4px solid #2196F3;
+            padding: 12px; border-radius: 4px; margin-top: 12px;
         }
-        .link-list {
-            list-style: none;
-            padding-left: 0;
-        }
-        .link-list li {
-            margin-bottom: 8px;
-        }
-        .link-list a {
-            color: #667eea;
-            text-decoration: none;
-            word-break: break-all;
-        }
-        .link-list a:hover {
-            text-decoration: underline;
-        }
+        .link-list { list-style: none; padding-left: 0; }
+        .link-list li { margin-bottom: 8px; }
+        .link-list a { color: #667eea; text-decoration: none; word-break: break-all; }
+        .link-list a:hover { text-decoration: underline; }
+        ol, ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
+        code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; font-family: monospace; font-size: 0.9em; }
         @media (max-width: 480px) {
-            body {
-                padding: 12px;
-            }
-            h1 {
-                font-size: 1.5rem;
-            }
-            .card {
-                padding: 16px;
-            }
+            body { padding: 12px; }
+            h1 { font-size: 1.5rem; }
+            .card { padding: 16px; }
+            .lang-switcher { position: static; margin-top: 12px; justify-content: center; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>自定义 WebDAV 配置</h1>
-            <p class="subtitle">连接任意 WebDAV 服务器</p>
+            <div class="lang-switcher">
+                <button class="lang-btn" onclick="switchLang('en')">EN</button>
+                <button class="lang-btn" onclick="switchLang('zh')">中文</button>
+                <button class="lang-btn" onclick="switchLang('ja')">日本語</button>
+                <button class="lang-btn" onclick="switchLang('ru')">RU</button>
+            </div>
+            <h1 id="title"></h1>
+            <p class="subtitle" id="subtitle"></p>
         </div>
 
         <div class="card">
-            <h2>📋 配置说明</h2>
-            <p>自定义 WebDAV 允许您连接任何支持 WebDAV 协议的服务器，包括：</p>
-            <ul style="padding-left: 20px; margin-top: 8px;">
-                <li>自建 WebDAV 服务器（Apache、Nginx、Caddy 等）</li>
-                <li>NAS 设备（Synology、QNAP、FreeNAS 等）</li>
-                <li>其他云存储服务的 WebDAV 接口</li>
-                <li>企业内部文件服务器</li>
-            </ul>
+            <h2 id="config-desc-title"></h2>
+            <p id="config-desc"></p>
+            <ul style="margin-top: 8px;" id="platforms-list"></ul>
         </div>
 
         <div class="card">
-            <h2>🔧 必填配置项</h2>
+            <h2 id="required-title"></h2>
             <div class="info-item">
-                <div class="info-label">服务器地址</div>
-                <div class="info-value">主机名或 IP 地址（如 example.com 或 192.168.1.100）</div>
+                <div class="info-label" id="server-label"></div>
+                <div class="info-value" id="server-value"></div>
             </div>
             <div class="info-item">
-                <div class="info-label">协议</div>
-                <div class="info-value">HTTPS（推荐）或 HTTP</div>
+                <div class="info-label" id="protocol-label"></div>
+                <div class="info-value" id="protocol-value"></div>
             </div>
             <div class="info-item">
-                <div class="info-label">端口</div>
-                <div class="info-value">HTTPS: 443，HTTP: 80（或自定义端口）</div>
+                <div class="info-label" id="port-label"></div>
+                <div class="info-value" id="port-value"></div>
             </div>
             <div class="info-item">
-                <div class="info-label">根路径</div>
-                <div class="info-value">WebDAV 服务路径（如 /webdav、/remote.php/dav 等）</div>
+                <div class="info-label" id="path-label"></div>
+                <div class="info-value" id="path-value"></div>
             </div>
             <div class="info-item">
-                <div class="info-label">用户名</div>
-                <div class="info-value">您的 WebDAV 账户用户名</div>
+                <div class="info-label" id="username-label"></div>
+                <div class="info-value" id="username-value"></div>
             </div>
             <div class="info-item">
-                <div class="info-label">密码</div>
-                <div class="info-value">您的 WebDAV 账户密码或应用专用密码</div>
+                <div class="info-label" id="password-label"></div>
+                <div class="info-value" id="password-value"></div>
             </div>
         </div>
 
         <div class="card">
-            <h2>⚙️ 常见 WebDAV 服务配置示例</h2>
-            
-            <h3 style="font-size: 1.1rem; margin-top: 16px; margin-bottom: 8px; color: #667eea;">Nextcloud</h3>
-            <ul style="padding-left: 20px;">
-                <li>服务器：<code>your-domain.com</code></li>
-                <li>协议：HTTPS</li>
-                <li>端口：443</li>
-                <li>根路径：<code>/remote.php/dav/files/USERNAME/</code></li>
-            </ul>
-
-            <h3 style="font-size: 1.1rem; margin-top: 16px; margin-bottom: 8px; color: #667eea;">ownCloud</h3>
-            <ul style="padding-left: 20px;">
-                <li>服务器：<code>your-domain.com</code></li>
-                <li>协议：HTTPS</li>
-                <li>端口：443</li>
-                <li>根路径：<code>/remote.php/webdav/</code></li>
-            </ul>
-
-            <h3 style="font-size: 1.1rem; margin-top: 16px; margin-bottom: 8px; color: #667eea;">Apache/Nginx WebDAV</h3>
-            <ul style="padding-left: 20px;">
-                <li>服务器：根据您的配置</li>
-                <li>协议：建议 HTTPS</li>
-                <li>端口：根据您的配置</li>
-                <li>根路径：根据您的配置（如 <code>/webdav</code>）</li>
-            </ul>
+            <h2 id="examples-title"></h2>
+            <div id="examples-content"></div>
         </div>
 
         <div class="card">
-            <h2>🔐 安全建议</h2>
-            <ul style="padding-left: 20px;">
-                <li><strong>使用 HTTPS：</strong>避免密码在网络传输中被窃取</li>
-                <li><strong>强密码：</strong>使用复杂且唯一的密码</li>
-                <li><strong>应用密码：</strong>如果服务器支持，使用应用专用密码而非主密码</li>
-                <li><strong>定期更新：</strong>保持服务器软件和固件为最新版本</li>
-                <li><strong>限制权限：</strong>为 WebDAV 账户仅授予必要的文件夹访问权限</li>
-            </ul>
+            <h2 id="security-title"></h2>
+            <ul id="security-list"></ul>
             
             <div class="warning">
-                <strong>⚠️ 重要提示</strong>
-                <p style="margin-top: 4px;">连接到自托管服务器时，请确保您信任该服务器。不要在不受信任的服务器上输入敏感凭据。</p>
+                <strong id="warning-title"></strong>
+                <p style="margin-top: 4px;" id="warning-content"></p>
             </div>
         </div>
 
         <div class="card">
-            <h2>🔍 常见问题</h2>
-            
-            <h3 style="font-size: 1.05rem; margin-bottom: 8px; color: #333;">Q: 连接失败怎么办？</h3>
-            <p style="margin-bottom: 12px;">A: 请检查：</p>
-            <ul style="padding-left: 20px; margin-bottom: 16px;">
-                <li>服务器地址、端口、路径是否正确</li>
-                <li>用户名和密码是否正确</li>
-                <li>服务器的 WebDAV 功能是否已启用</li>
-                <li>防火墙是否阻止了连接</li>
-                <li>使用 HTTP 还是 HTTPS（与服务器配置匹配）</li>
-            </ul>
-
-            <h3 style="font-size: 1.05rem; margin-bottom: 8px; color: #333;">Q: 根路径应该填什么？</h3>
-            <p style="margin-bottom: 16px;">A: 根路径取决于您的 WebDAV 服务器配置。常见值包括：<code>/</code>、<code>/webdav</code>、<code>/remote.php/dav/files/USERNAME/</code> 等。请查阅您的服务器文档。</p>
-
-            <h3 style="font-size: 1.05rem; margin-bottom: 8px; color: #333;">Q: 可以使用 HTTP 吗？</h3>
-            <p>A: 技术上可以，但<strong>强烈不推荐</strong>。HTTP 不加密，您的用户名和密码会以明文传输。仅在局域网内测试时使用 HTTP。</p>
+            <h2 id="faq-title"></h2>
+            <div id="faq-content"></div>
         </div>
 
         <div class="card">
-            <h2>📚 参考资源</h2>
-            <ul class="link-list">
-                <li>📖 <a href="https://en.wikipedia.org/wiki/WebDAV" target="_blank">WebDAV 协议说明（维基百科）</a></li>
-                <li>🔧 <a href="https://docs.nextcloud.com/server/latest/user_manual/en/files/access_webdav.html" target="_blank">Nextcloud WebDAV 文档</a></li>
-                <li>🔧 <a href="https://doc.owncloud.com/server/next/user_manual/files/access_webdav.html" target="_blank">ownCloud WebDAV 文档</a></li>
-            </ul>
+            <h2 id="refs-title"></h2>
+            <ul class="link-list" id="refs-list"></ul>
         </div>
     </div>
+
+    <script>
+        const translations = {
+            en: {
+                title: "Custom WebDAV Configuration",
+                subtitle: "Connect to any WebDAV server",
+                configDescTitle: "📋 Configuration Description",
+                configDesc: "Custom WebDAV allows you to connect to any WebDAV-compatible server, including:",
+                platforms: [
+                    "Self-hosted WebDAV servers (Apache, Nginx, Caddy, etc.)",
+                    "NAS devices (Synology, QNAP, FreeNAS, etc.)",
+                    "Other cloud storage services with WebDAV interfaces",
+                    "Enterprise internal file servers"
+                ],
+                requiredTitle: "🔧 Required Configuration Items",
+                serverLabel: "Server Address",
+                serverValue: "Hostname or IP address (e.g., example.com or 192.168.1.100)",
+                protocolLabel: "Protocol",
+                protocolValue: "HTTPS (recommended) or HTTP",
+                portLabel: "Port",
+                portValue: "HTTPS: 443, HTTP: 80 (or custom port)",
+                pathLabel: "Root Path",
+                pathValue: "WebDAV service path (e.g., /webdav, /remote.php/dav, etc.)",
+                usernameLabel: "Username",
+                usernameValue: "Your WebDAV account username",
+                passwordLabel: "Password",
+                passwordValue: "Your WebDAV account password or app-specific password",
+                examplesTitle: "⚙️ Common WebDAV Service Configuration Examples",
+                examples: [
+                    {
+                        name: "Nextcloud",
+                        items: [
+                            "Server: your-domain.com",
+                            "Protocol: HTTPS",
+                            "Port: 443",
+                            "Root Path: /remote.php/dav/files/USERNAME/"
+                        ]
+                    },
+                    {
+                        name: "ownCloud",
+                        items: [
+                            "Server: your-domain.com",
+                            "Protocol: HTTPS",
+                            "Port: 443",
+                            "Root Path: /remote.php/webdav/"
+                        ]
+                    },
+                    {
+                        name: "Apache/Nginx WebDAV",
+                        items: [
+                            "Server: Based on your configuration",
+                            "Protocol: Recommend HTTPS",
+                            "Port: Based on your configuration",
+                            "Root Path: Based on your configuration (e.g., /webdav)"
+                        ]
+                    }
+                ],
+                securityTitle: "🔐 Security Recommendations",
+                securityItems: [
+                    "Use HTTPS: Avoid password theft during network transmission",
+                    "Strong Password: Use complex and unique passwords",
+                    "App Password: If server supports, use app-specific password instead of main password",
+                    "Regular Updates: Keep server software and firmware up to date",
+                    "Limit Permissions: Grant WebDAV account only necessary folder access"
+                ],
+                warningTitle: "⚠️ Important Note",
+                warningContent: "When connecting to self-hosted servers, ensure you trust that server. Do not enter sensitive credentials on untrusted servers.",
+                faqTitle: "🔍 Frequently Asked Questions",
+                faqs: [
+                    {
+                        q: "Q: What to do if connection fails?",
+                        a: "A: Please check:",
+                        items: [
+                            "Server address, port, and path are correct",
+                            "Username and password are correct",
+                            "Server's WebDAV functionality is enabled",
+                            "Firewall is not blocking the connection",
+                            "Using HTTP or HTTPS (matches server configuration)"
+                        ]
+                    },
+                    {
+                        q: "Q: What should the root path be?",
+                        a: "A: Root path depends on your WebDAV server configuration. Common values include: /, /webdav, /remote.php/dav/files/USERNAME/, etc. Please refer to your server documentation."
+                    },
+                    {
+                        q: "Q: Can I use HTTP?",
+                        a: "A: Technically yes, but strongly not recommended. HTTP is unencrypted, your username and password will be transmitted in plain text. Use HTTP only for testing on LAN."
+                    }
+                ],
+                refsTitle: "📚 Reference Resources",
+                refs: [
+                    { text: "📖 WebDAV Protocol Description (Wikipedia)", url: "https://en.wikipedia.org/wiki/WebDAV" },
+                    { text: "🔧 Nextcloud WebDAV Documentation", url: "https://docs.nextcloud.com/server/latest/user_manual/en/files/access_webdav.html" },
+                    { text: "🔧 ownCloud WebDAV Documentation", url: "https://doc.owncloud.com/server/next/user_manual/files/access_webdav.html" }
+                ]
+            },
+            zh: {
+                title: "自定义 WebDAV 配置",
+                subtitle: "连接任意 WebDAV 服务器",
+                configDescTitle: "📋 配置说明",
+                configDesc: "自定义 WebDAV 允许您连接任何支持 WebDAV 协议的服务器，包括：",
+                platforms: [
+                    "自建 WebDAV 服务器（Apache、Nginx、Caddy 等）",
+                    "NAS 设备（Synology、QNAP、FreeNAS 等）",
+                    "其他云存储服务的 WebDAV 接口",
+                    "企业内部文件服务器"
+                ],
+                requiredTitle: "🔧 必填配置项",
+                serverLabel: "服务器地址",
+                serverValue: "主机名或 IP 地址（如 example.com 或 192.168.1.100）",
+                protocolLabel: "协议",
+                protocolValue: "HTTPS（推荐）或 HTTP",
+                portLabel: "端口",
+                portValue: "HTTPS: 443，HTTP: 80（或自定义端口）",
+                pathLabel: "根路径",
+                pathValue: "WebDAV 服务路径（如 /webdav、/remote.php/dav 等）",
+                usernameLabel: "用户名",
+                usernameValue: "您的 WebDAV 账户用户名",
+                passwordLabel: "密码",
+                passwordValue: "您的 WebDAV 账户密码或应用专用密码",
+                examplesTitle: "⚙️ 常见 WebDAV 服务配置示例",
+                examples: [
+                    {
+                        name: "Nextcloud",
+                        items: [
+                            "服务器：your-domain.com",
+                            "协议：HTTPS",
+                            "端口：443",
+                            "根路径：/remote.php/dav/files/USERNAME/"
+                        ]
+                    },
+                    {
+                        name: "ownCloud",
+                        items: [
+                            "服务器：your-domain.com",
+                            "协议：HTTPS",
+                            "端口：443",
+                            "根路径：/remote.php/webdav/"
+                        ]
+                    },
+                    {
+                        name: "Apache/Nginx WebDAV",
+                        items: [
+                            "服务器：根据您的配置",
+                            "协议：建议 HTTPS",
+                            "端口：根据您的配置",
+                            "根路径：根据您的配置（如 /webdav）"
+                        ]
+                    }
+                ],
+                securityTitle: "🔐 安全建议",
+                securityItems: [
+                    "使用 HTTPS：避免密码在网络传输中被窃取",
+                    "强密码：使用复杂且唯一的密码",
+                    "应用密码：如果服务器支持，使用应用专用密码而非主密码",
+                    "定期更新：保持服务器软件和固件为最新版本",
+                    "限制权限：为 WebDAV 账户仅授予必要的文件夹访问权限"
+                ],
+                warningTitle: "⚠️ 重要提示",
+                warningContent: "连接到自托管服务器时，请确保您信任该服务器。不要在不受信任的服务器上输入敏感凭据。",
+                faqTitle: "🔍 常见问题",
+                faqs: [
+                    {
+                        q: "Q: 连接失败怎么办？",
+                        a: "A: 请检查：",
+                        items: [
+                            "服务器地址、端口、路径是否正确",
+                            "用户名和密码是否正确",
+                            "服务器的 WebDAV 功能是否已启用",
+                            "防火墙是否阻止了连接",
+                            "使用 HTTP 还是 HTTPS（与服务器配置匹配）"
+                        ]
+                    },
+                    {
+                        q: "Q: 根路径应该填什么？",
+                        a: "A: 根路径取决于您的 WebDAV 服务器配置。常见值包括：/、/webdav、/remote.php/dav/files/USERNAME/ 等。请查阅您的服务器文档。"
+                    },
+                    {
+                        q: "Q: 可以使用 HTTP 吗？",
+                        a: "A: 技术上可以，但强烈不推荐。HTTP 不加密，您的用户名和密码会以明文传输。仅在局域网内测试时使用 HTTP。"
+                    }
+                ],
+                refsTitle: "📚 参考资源",
+                refs: [
+                    { text: "📖 WebDAV 协议说明（维基百科）", url: "https://en.wikipedia.org/wiki/WebDAV" },
+                    { text: "🔧 Nextcloud WebDAV 文档", url: "https://docs.nextcloud.com/server/latest/user_manual/en/files/access_webdav.html" },
+                    { text: "🔧 ownCloud WebDAV 文档", url: "https://doc.owncloud.com/server/next/user_manual/files/access_webdav.html" }
+                ]
+            },
+            ja: {
+                title: "カスタム WebDAV 設定",
+                subtitle: "任意の WebDAV サーバーに接続",
+                configDescTitle: "📋 設定の説明",
+                configDesc: "カスタム WebDAV を使用すると、WebDAV プロトコルをサポートする任意のサーバーに接続できます：",
+                platforms: [
+                    "セルフホスト WebDAV サーバー（Apache、Nginx、Caddy など）",
+                    "NAS デバイス（Synology、QNAP、FreeNAS など）",
+                    "WebDAV インターフェースを持つ他のクラウドストレージサービス",
+                    "企業内部ファイルサーバー"
+                ],
+                requiredTitle: "🔧 必須設定項目",
+                serverLabel: "サーバーアドレス",
+                serverValue: "ホスト名または IP アドレス（例：example.com または 192.168.1.100）",
+                protocolLabel: "プロトコル",
+                protocolValue: "HTTPS（推奨）または HTTP",
+                portLabel: "ポート",
+                portValue: "HTTPS: 443、HTTP: 80（またはカスタムポート）",
+                pathLabel: "ルートパス",
+                pathValue: "WebDAV サービスパス（例：/webdav、/remote.php/dav など）",
+                usernameLabel: "ユーザー名",
+                usernameValue: "WebDAV アカウントのユーザー名",
+                passwordLabel: "パスワード",
+                passwordValue: "WebDAV アカウントのパスワードまたはアプリ専用パスワード",
+                examplesTitle: "⚙️ 一般的な WebDAV サービス設定例",
+                examples: [
+                    {
+                        name: "Nextcloud",
+                        items: [
+                            "サーバー：your-domain.com",
+                            "プロトコル：HTTPS",
+                            "ポート：443",
+                            "ルートパス：/remote.php/dav/files/USERNAME/"
+                        ]
+                    },
+                    {
+                        name: "ownCloud",
+                        items: [
+                            "サーバー：your-domain.com",
+                            "プロトコル：HTTPS",
+                            "ポート：443",
+                            "ルートパス：/remote.php/webdav/"
+                        ]
+                    },
+                    {
+                        name: "Apache/Nginx WebDAV",
+                        items: [
+                            "サーバー：設定に基づく",
+                            "プロトコル：HTTPS を推奨",
+                            "ポート：設定に基づく",
+                            "ルートパス：設定に基づく（例：/webdav）"
+                        ]
+                    }
+                ],
+                securityTitle: "🔐 セキュリティの推奨事項",
+                securityItems: [
+                    "HTTPS を使用：ネットワーク送信中のパスワード盗難を防ぐ",
+                    "強力なパスワード：複雑で一意のパスワードを使用",
+                    "アプリパスワード：サーバーがサポートしている場合は、メインパスワードの代わりにアプリ専用パスワードを使用",
+                    "定期的な更新：サーバーソフトウェアとファームウェアを最新の状態に保つ",
+                    "権限の制限：WebDAV アカウントに必要なフォルダーアクセスのみを付与"
+                ],
+                warningTitle: "⚠️ 重要な注意",
+                warningContent: "セルフホストサーバーに接続する場合は、そのサーバーを信頼していることを確認してください。信頼できないサーバーに機密情報を入力しないでください。",
+                faqTitle: "🔍 よくある質問",
+                faqs: [
+                    {
+                        q: "Q: 接続に失敗した場合はどうすればよいですか？",
+                        a: "A: 以下を確認してください：",
+                        items: [
+                            "サーバーアドレス、ポート、パスが正しいか",
+                            "ユーザー名とパスワードが正しいか",
+                            "サーバーの WebDAV 機能が有効になっているか",
+                            "ファイアウォールが接続をブロックしていないか",
+                            "HTTP または HTTPS を使用しているか（サーバー設定と一致）"
+                        ]
+                    },
+                    {
+                        q: "Q: ルートパスには何を入力すればよいですか？",
+                        a: "A: ルートパスは WebDAV サーバーの設定によって異なります。一般的な値には、/、/webdav、/remote.php/dav/files/USERNAME/ などがあります。サーバーのドキュメントを参照してください。"
+                    },
+                    {
+                        q: "Q: HTTP を使用できますか？",
+                        a: "A: 技術的には可能ですが、強く推奨されません。HTTP は暗号化されていないため、ユーザー名とパスワードが平文で送信されます。LAN でのテスト時のみ HTTP を使用してください。"
+                    }
+                ],
+                refsTitle: "📚 参考リソース",
+                refs: [
+                    { text: "📖 WebDAV プロトコルの説明（Wikipedia）", url: "https://en.wikipedia.org/wiki/WebDAV" },
+                    { text: "🔧 Nextcloud WebDAV ドキュメント", url: "https://docs.nextcloud.com/server/latest/user_manual/en/files/access_webdav.html" },
+                    { text: "🔧 ownCloud WebDAV ドキュメント", url: "https://doc.owncloud.com/server/next/user_manual/files/access_webdav.html" }
+                ]
+            },
+            ru: {
+                title: "Настройка пользовательского WebDAV",
+                subtitle: "Подключение к любому серверу WebDAV",
+                configDescTitle: "📋 Описание конфигурации",
+                configDesc: "Пользовательский WebDAV позволяет подключаться к любому серверу, совместимому с WebDAV, включая:",
+                platforms: [
+                    "Самостоятельно размещенные серверы WebDAV (Apache, Nginx, Caddy и т.д.)",
+                    "NAS-устройства (Synology, QNAP, FreeNAS и т.д.)",
+                    "Другие облачные сервисы хранения с интерфейсами WebDAV",
+                    "Корпоративные внутренние файловые серверы"
+                ],
+                requiredTitle: "🔧 Обязательные параметры конфигурации",
+                serverLabel: "Адрес сервера",
+                serverValue: "Имя хоста или IP-адрес (например, example.com или 192.168.1.100)",
+                protocolLabel: "Протокол",
+                protocolValue: "HTTPS (рекомендуется) или HTTP",
+                portLabel: "Порт",
+                portValue: "HTTPS: 443, HTTP: 80 (или пользовательский порт)",
+                pathLabel: "Корневой путь",
+                pathValue: "Путь к службе WebDAV (например, /webdav, /remote.php/dav и т.д.)",
+                usernameLabel: "Имя пользователя",
+                usernameValue: "Имя пользователя вашей учетной записи WebDAV",
+                passwordLabel: "Пароль",
+                passwordValue: "Пароль вашей учетной записи WebDAV или пароль приложения",
+                examplesTitle: "⚙️ Примеры настройки распространенных служб WebDAV",
+                examples: [
+                    {
+                        name: "Nextcloud",
+                        items: [
+                            "Сервер: your-domain.com",
+                            "Протокол: HTTPS",
+                            "Порт: 443",
+                            "Корневой путь: /remote.php/dav/files/USERNAME/"
+                        ]
+                    },
+                    {
+                        name: "ownCloud",
+                        items: [
+                            "Сервер: your-domain.com",
+                            "Протокол: HTTPS",
+                            "Порт: 443",
+                            "Корневой путь: /remote.php/webdav/"
+                        ]
+                    },
+                    {
+                        name: "Apache/Nginx WebDAV",
+                        items: [
+                            "Сервер: На основе вашей конфигурации",
+                            "Протокол: Рекомендуется HTTPS",
+                            "Порт: На основе вашей конфигурации",
+                            "Корневой путь: На основе вашей конфигурации (например, /webdav)"
+                        ]
+                    }
+                ],
+                securityTitle: "🔐 Рекомендации по безопасности",
+                securityItems: [
+                    "Используйте HTTPS: Избегайте кражи паролей при сетевой передаче",
+                    "Надежный пароль: Используйте сложные и уникальные пароли",
+                    "Пароль приложения: Если сервер поддерживает, используйте пароль приложения вместо основного пароля",
+                    "Регулярные обновления: Поддерживайте программное обеспечение сервера и прошивку в актуальном состоянии",
+                    "Ограничение разрешений: Предоставьте учетной записи WebDAV доступ только к необходимым папкам"
+                ],
+                warningTitle: "⚠️ Важное примечание",
+                warningContent: "При подключении к самостоятельно размещенным серверам убедитесь, что вы доверяете этому серверу. Не вводите конфиденциальные учетные данные на недоверенных серверах.",
+                faqTitle: "🔍 Часто задаваемые вопросы",
+                faqs: [
+                    {
+                        q: "Q: Что делать, если подключение не удалось?",
+                        a: "A: Пожалуйста, проверьте:",
+                        items: [
+                            "Правильность адреса сервера, порта и пути",
+                            "Правильность имени пользователя и пароля",
+                            "Включена ли функция WebDAV на сервере",
+                            "Не блокирует ли брандмауэр подключение",
+                            "Используете ли вы HTTP или HTTPS (соответствует конфигурации сервера)"
+                        ]
+                    },
+                    {
+                        q: "Q: Что должно быть в корневом пути?",
+                        a: "A: Корневой путь зависит от конфигурации вашего сервера WebDAV. Обычные значения включают: /, /webdav, /remote.php/dav/files/USERNAME/ и т.д. Пожалуйста, обратитесь к документации вашего сервера."
+                    },
+                    {
+                        q: "Q: Можно ли использовать HTTP?",
+                        a: "A: Технически да, но настоятельно не рекомендуется. HTTP не шифруется, ваше имя пользователя и пароль будут передаваться в открытом виде. Используйте HTTP только для тестирования в локальной сети."
+                    }
+                ],
+                refsTitle: "📚 Справочные ресурсы",
+                refs: [
+                    { text: "📖 Описание протокола WebDAV (Википедия)", url: "https://en.wikipedia.org/wiki/WebDAV" },
+                    { text: "🔧 Документация Nextcloud WebDAV", url: "https://docs.nextcloud.com/server/latest/user_manual/en/files/access_webdav.html" },
+                    { text: "🔧 Документация ownCloud WebDAV", url: "https://doc.owncloud.com/server/next/user_manual/files/access_webdav.html" }
+                ]
+            }
+        };
+
+        function detectLanguage() {
+            const browserLang = navigator.language || navigator.userLanguage;
+            const langCode = browserLang.toLowerCase().split('-')[0];
+            return translations[langCode] ? langCode : 'en';
+        }
+
+        function switchLang(lang) {
+            const t = translations[lang];
+            if (!t) return;
+
+            document.documentElement.lang = lang;
+            document.getElementById('title').textContent = t.title;
+            document.getElementById('subtitle').textContent = t.subtitle;
+            document.getElementById('config-desc-title').textContent = t.configDescTitle;
+            document.getElementById('config-desc').textContent = t.configDesc;
+            document.getElementById('required-title').textContent = t.requiredTitle;
+            document.getElementById('server-label').textContent = t.serverLabel;
+            document.getElementById('server-value').textContent = t.serverValue;
+            document.getElementById('protocol-label').textContent = t.protocolLabel;
+            document.getElementById('protocol-value').textContent = t.protocolValue;
+            document.getElementById('port-label').textContent = t.portLabel;
+            document.getElementById('port-value').textContent = t.portValue;
+            document.getElementById('path-label').textContent = t.pathLabel;
+            document.getElementById('path-value').textContent = t.pathValue;
+            document.getElementById('username-label').textContent = t.usernameLabel;
+            document.getElementById('username-value').textContent = t.usernameValue;
+            document.getElementById('password-label').textContent = t.passwordLabel;
+            document.getElementById('password-value').textContent = t.passwordValue;
+            document.getElementById('examples-title').textContent = t.examplesTitle;
+            document.getElementById('security-title').textContent = t.securityTitle;
+            document.getElementById('warning-title').textContent = t.warningTitle;
+            document.getElementById('warning-content').textContent = t.warningContent;
+            document.getElementById('faq-title').textContent = t.faqTitle;
+            document.getElementById('refs-title').textContent = t.refsTitle;
+
+            const platformsList = document.getElementById('platforms-list');
+            platformsList.innerHTML = '';
+            t.platforms.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                platformsList.appendChild(li);
+            });
+
+            const examplesContent = document.getElementById('examples-content');
+            examplesContent.innerHTML = '';
+            t.examples.forEach(example => {
+                const h3 = document.createElement('h3');
+                h3.textContent = example.name;
+                examplesContent.appendChild(h3);
+                const ul = document.createElement('ul');
+                example.items.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = item;
+                    ul.appendChild(li);
+                });
+                examplesContent.appendChild(ul);
+            });
+
+            const securityList = document.getElementById('security-list');
+            securityList.innerHTML = '';
+            t.securityItems.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                securityList.appendChild(li);
+            });
+
+            const faqContent = document.getElementById('faq-content');
+            faqContent.innerHTML = '';
+            t.faqs.forEach(faq => {
+                const h3 = document.createElement('h3');
+                h3.style.fontSize = '1.05rem';
+                h3.style.marginBottom = '8px';
+                h3.style.color = '#333';
+                h3.textContent = faq.q;
+                faqContent.appendChild(h3);
+                
+                const p = document.createElement('p');
+                p.style.marginBottom = faq.items ? '12px' : '16px';
+                p.textContent = faq.a;
+                faqContent.appendChild(p);
+                
+                if (faq.items) {
+                    const ul = document.createElement('ul');
+                    ul.style.paddingLeft = '20px';
+                    ul.style.marginBottom = '16px';
+                    faq.items.forEach(item => {
+                        const li = document.createElement('li');
+                        li.textContent = item;
+                        ul.appendChild(li);
+                    });
+                    faqContent.appendChild(ul);
+                }
+            });
+
+            const refsList = document.getElementById('refs-list');
+            refsList.innerHTML = '';
+            t.refs.forEach(ref => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = ref.url;
+                a.target = '_blank';
+                a.textContent = ref.text;
+                li.appendChild(a);
+                refsList.appendChild(li);
+            });
+
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            localStorage.setItem('preferredLanguage', lang);
+        }
+
+        window.onload = function() {
+            const savedLang = localStorage.getItem('preferredLanguage') || detectLanguage();
+            switchLang(savedLang);
+            document.querySelector(`[onclick="switchLang('${savedLang}')"]`).classList.add('active');
+        };
+    </script>
 </body>
 </html>

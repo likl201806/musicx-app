@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InfiniCLOUD WebDAV 配置说明</title>
+    <title>InfiniCLOUD WebDAV Configuration</title>
     <style>
         * {
             margin: 0;
@@ -11,7 +11,7 @@
             box-sizing: border-box;
         }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans CJK SC", sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans CJK SC", "Noto Sans CJK JP", sans-serif;
             line-height: 1.6;
             color: #333;
             background: #f5f5f5;
@@ -28,6 +28,32 @@
             border-radius: 12px;
             margin-bottom: 16px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            position: relative;
+        }
+        .lang-switcher {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            display: flex;
+            gap: 8px;
+        }
+        .lang-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+        .lang-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        .lang-btn.active {
+            background: rgba(255,255,255,0.9);
+            color: #667eea;
+            font-weight: 600;
         }
         h1 {
             font-size: 1.8rem;
@@ -97,6 +123,12 @@
         .link-list a:hover {
             text-decoration: underline;
         }
+        ol, ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
         @media (max-width: 480px) {
             body {
                 padding: 12px;
@@ -107,69 +139,270 @@
             .card {
                 padding: 16px;
             }
+            .lang-switcher {
+                position: static;
+                margin-top: 12px;
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>InfiniCLOUD WebDAV 配置</h1>
-            <p class="subtitle">原 TeraCLOUD，提供免费 WebDAV 云存储</p>
+            <div class="lang-switcher">
+                <button class="lang-btn" onclick="switchLang('en')">EN</button>
+                <button class="lang-btn" onclick="switchLang('zh')">中文</button>
+                <button class="lang-btn" onclick="switchLang('ja')">日本語</button>
+                <button class="lang-btn" onclick="switchLang('ru')">RU</button>
+            </div>
+            <h1 id="title"></h1>
+            <p class="subtitle" id="subtitle"></p>
         </div>
 
         <div class="card">
-            <h2>📋 默认配置</h2>
+            <h2 id="config-title"></h2>
             <div class="info-item">
-                <div class="info-label">服务器地址（示例）</div>
+                <div class="info-label" id="server-label"></div>
                 <div class="info-value">yaene.infini-cloud.net</div>
             </div>
             <div class="info-item">
-                <div class="info-label">协议</div>
-                <div class="info-value">HTTPS (端口 443)</div>
+                <div class="info-label" id="protocol-label"></div>
+                <div class="info-value">HTTPS (443)</div>
             </div>
             <div class="info-item">
-                <div class="info-label">根路径</div>
+                <div class="info-label" id="path-label"></div>
                 <div class="info-value">/dav/</div>
             </div>
             <div class="info-item">
-                <div class="info-label">认证方式</div>
+                <div class="info-label" id="auth-label"></div>
                 <div class="info-value">Basic Authentication</div>
             </div>
         </div>
 
         <div class="card">
-            <h2>🔑 账号与认证</h2>
-            <p><strong>用户名：</strong>您的 InfiniCLOUD 注册邮箱</p>
-            <p style="margin-top: 8px;"><strong>密码：</strong>您的 InfiniCLOUD 账户密码</p>
+            <h2 id="account-title"></h2>
+            <p><strong id="username-label"></strong> <span id="username-desc"></span></p>
+            <p style="margin-top: 8px;"><strong id="password-label"></strong> <span id="password-desc"></span></p>
             
             <div class="tip">
-                <strong>💡 重要提示</strong>
-                <p style="margin-top: 4px;">InfiniCLOUD 采用分布式节点架构，每个用户的服务器地址前缀不同。您需要登录 My Page 查看自己的 WebDAV 服务器地址。</p>
+                <strong id="tip-title"></strong>
+                <p style="margin-top: 4px;" id="tip-content"></p>
             </div>
         </div>
 
         <div class="card">
-            <h2>🌐 如何获取服务器地址</h2>
-            <ol style="padding-left: 20px;">
-                <li>登录 InfiniCLOUD 官网</li>
-                <li>进入 My Page（我的页面）</li>
-                <li>查找 WebDAV 配置信息</li>
-                <li>复制您的专属服务器地址（格式如：<code>节点名.infini-cloud.net</code> 或 <code>节点名.teracloud.jp</code>）</li>
-            </ol>
+            <h2 id="howto-title"></h2>
+            <ol id="howto-list"></ol>
             
             <div class="warning">
-                <strong>⚠️ 注意</strong>
-                <p style="margin-top: 4px;">不同用户的节点前缀不同，请勿使用他人的服务器地址。应用中的默认值仅供参考。</p>
+                <strong id="warning-title"></strong>
+                <p style="margin-top: 4px;" id="warning-content"></p>
             </div>
         </div>
 
         <div class="card">
-            <h2>📚 官方参考</h2>
-            <ul class="link-list">
-                <li>📖 <a href="https://infini-cloud.net/en/modules/mypage/usage/" target="_blank">InfiniCLOUD 使用说明</a></li>
-                <li>🏠 <a href="https://infini-cloud.net/" target="_blank">InfiniCLOUD 官网</a></li>
-            </ul>
+            <h2 id="refs-title"></h2>
+            <ul class="link-list" id="refs-list"></ul>
         </div>
     </div>
+
+    <script>
+        const translations = {
+            en: {
+                title: "InfiniCLOUD WebDAV Configuration",
+                subtitle: "Formerly TeraCLOUD, provides free WebDAV cloud storage",
+                configTitle: "📋 Default Configuration",
+                serverLabel: "Server Address (Example)",
+                protocolLabel: "Protocol",
+                pathLabel: "Root Path",
+                authLabel: "Authentication",
+                accountTitle: "🔑 Account & Authentication",
+                usernameLabel: "Username:",
+                usernameDesc: "Your InfiniCLOUD registration email",
+                passwordLabel: "Password:",
+                passwordDesc: "Your InfiniCLOUD account password",
+                tipTitle: "💡 Important Note",
+                tipContent: "InfiniCLOUD uses a distributed node architecture. Each user has a different server address prefix. You need to log in to My Page to check your WebDAV server address.",
+                howtoTitle: "🌐 How to Get Server Address",
+                howtoSteps: [
+                    "Log in to InfiniCLOUD website",
+                    "Go to My Page",
+                    "Find WebDAV configuration information",
+                    "Copy your exclusive server address (format: nodename.infini-cloud.net or nodename.teracloud.jp)"
+                ],
+                warningTitle: "⚠️ Note",
+                warningContent: "Different users have different node prefixes. Do not use someone else's server address. The default value in the app is for reference only.",
+                refsTitle: "📚 Official Reference",
+                refs: [
+                    { text: "📖 InfiniCLOUD Usage Guide", url: "https://infini-cloud.net/en/modules/mypage/usage/" },
+                    { text: "🏠 InfiniCLOUD Official Site", url: "https://infini-cloud.net/" }
+                ]
+            },
+            zh: {
+                title: "InfiniCLOUD WebDAV 配置",
+                subtitle: "原 TeraCLOUD，提供免费 WebDAV 云存储",
+                configTitle: "📋 默认配置",
+                serverLabel: "服务器地址（示例）",
+                protocolLabel: "协议",
+                pathLabel: "根路径",
+                authLabel: "认证方式",
+                accountTitle: "🔑 账号与认证",
+                usernameLabel: "用户名：",
+                usernameDesc: "您的 InfiniCLOUD 注册邮箱",
+                passwordLabel: "密码：",
+                passwordDesc: "您的 InfiniCLOUD 账户密码",
+                tipTitle: "💡 重要提示",
+                tipContent: "InfiniCLOUD 采用分布式节点架构，每个用户的服务器地址前缀不同。您需要登录 My Page 查看自己的 WebDAV 服务器地址。",
+                howtoTitle: "🌐 如何获取服务器地址",
+                howtoSteps: [
+                    "登录 InfiniCLOUD 官网",
+                    "进入 My Page（我的页面）",
+                    "查找 WebDAV 配置信息",
+                    "复制您的专属服务器地址（格式如：节点名.infini-cloud.net 或 节点名.teracloud.jp）"
+                ],
+                warningTitle: "⚠️ 注意",
+                warningContent: "不同用户的节点前缀不同，请勿使用他人的服务器地址。应用中的默认值仅供参考。",
+                refsTitle: "📚 官方参考",
+                refs: [
+                    { text: "📖 InfiniCLOUD 使用说明", url: "https://infini-cloud.net/en/modules/mypage/usage/" },
+                    { text: "🏠 InfiniCLOUD 官网", url: "https://infini-cloud.net/" }
+                ]
+            },
+            ja: {
+                title: "InfiniCLOUD WebDAV 設定",
+                subtitle: "旧 TeraCLOUD、無料の WebDAV クラウドストレージを提供",
+                configTitle: "📋 デフォルト設定",
+                serverLabel: "サーバーアドレス（例）",
+                protocolLabel: "プロトコル",
+                pathLabel: "ルートパス",
+                authLabel: "認証方式",
+                accountTitle: "🔑 アカウントと認証",
+                usernameLabel: "ユーザー名：",
+                usernameDesc: "InfiniCLOUD 登録メールアドレス",
+                passwordLabel: "パスワード：",
+                passwordDesc: "InfiniCLOUD アカウントパスワード",
+                tipTitle: "💡 重要な注意",
+                tipContent: "InfiniCLOUD は分散ノードアーキテクチャを採用しており、各ユーザーのサーバーアドレスプレフィックスが異なります。My Page にログインして、自分の WebDAV サーバーアドレスを確認する必要があります。",
+                howtoTitle: "🌐 サーバーアドレスの取得方法",
+                howtoSteps: [
+                    "InfiniCLOUD ウェブサイトにログイン",
+                    "My Page に移動",
+                    "WebDAV 設定情報を検索",
+                    "専用サーバーアドレスをコピー（形式：nodename.infini-cloud.net または nodename.teracloud.jp）"
+                ],
+                warningTitle: "⚠️ 注意",
+                warningContent: "ユーザーごとにノードプレフィックスが異なります。他人のサーバーアドレスを使用しないでください。アプリのデフォルト値は参考用です。",
+                refsTitle: "📚 公式リファレンス",
+                refs: [
+                    { text: "📖 InfiniCLOUD 使用ガイド", url: "https://infini-cloud.net/en/modules/mypage/usage/" },
+                    { text: "🏠 InfiniCLOUD 公式サイト", url: "https://infini-cloud.net/" }
+                ]
+            },
+            ru: {
+                title: "Настройка InfiniCLOUD WebDAV",
+                subtitle: "Ранее TeraCLOUD, предоставляет бесплатное облачное хранилище WebDAV",
+                configTitle: "📋 Конфигурация по умолчанию",
+                serverLabel: "Адрес сервера (пример)",
+                protocolLabel: "Протокол",
+                pathLabel: "Корневой путь",
+                authLabel: "Аутентификация",
+                accountTitle: "🔑 Учетная запись и аутентификация",
+                usernameLabel: "Имя пользователя:",
+                usernameDesc: "Ваш регистрационный email InfiniCLOUD",
+                passwordLabel: "Пароль:",
+                passwordDesc: "Пароль вашей учетной записи InfiniCLOUD",
+                tipTitle: "💡 Важное примечание",
+                tipContent: "InfiniCLOUD использует архитектуру распределенных узлов. Каждый пользователь имеет свой префикс адреса сервера. Вам необходимо войти в My Page, чтобы проверить адрес вашего WebDAV-сервера.",
+                howtoTitle: "🌐 Как получить адрес сервера",
+                howtoSteps: [
+                    "Войдите на сайт InfiniCLOUD",
+                    "Перейдите в My Page",
+                    "Найдите информацию о конфигурации WebDAV",
+                    "Скопируйте свой эксклюзивный адрес сервера (формат: nodename.infini-cloud.net или nodename.teracloud.jp)"
+                ],
+                warningTitle: "⚠️ Примечание",
+                warningContent: "У разных пользователей разные префиксы узлов. Не используйте чужой адрес сервера. Значение по умолчанию в приложении предназначено только для справки.",
+                refsTitle: "📚 Официальная справка",
+                refs: [
+                    { text: "📖 Руководство по использованию InfiniCLOUD", url: "https://infini-cloud.net/en/modules/mypage/usage/" },
+                    { text: "🏠 Официальный сайт InfiniCLOUD", url: "https://infini-cloud.net/" }
+                ]
+            }
+        };
+
+        function detectLanguage() {
+            const browserLang = navigator.language || navigator.userLanguage;
+            const langCode = browserLang.toLowerCase().split('-')[0];
+            
+            if (translations[langCode]) {
+                return langCode;
+            }
+            return 'en'; // Default to English
+        }
+
+        function switchLang(lang) {
+            const t = translations[lang];
+            if (!t) return;
+
+            document.documentElement.lang = lang;
+            document.getElementById('title').textContent = t.title;
+            document.getElementById('subtitle').textContent = t.subtitle;
+            document.getElementById('config-title').textContent = t.configTitle;
+            document.getElementById('server-label').textContent = t.serverLabel;
+            document.getElementById('protocol-label').textContent = t.protocolLabel;
+            document.getElementById('path-label').textContent = t.pathLabel;
+            document.getElementById('auth-label').textContent = t.authLabel;
+            document.getElementById('account-title').textContent = t.accountTitle;
+            document.getElementById('username-label').textContent = t.usernameLabel;
+            document.getElementById('username-desc').textContent = t.usernameDesc;
+            document.getElementById('password-label').textContent = t.passwordLabel;
+            document.getElementById('password-desc').textContent = t.passwordDesc;
+            document.getElementById('tip-title').textContent = t.tipTitle;
+            document.getElementById('tip-content').textContent = t.tipContent;
+            document.getElementById('howto-title').textContent = t.howtoTitle;
+            document.getElementById('warning-title').textContent = t.warningTitle;
+            document.getElementById('warning-content').textContent = t.warningContent;
+            document.getElementById('refs-title').textContent = t.refsTitle;
+
+            // Howto steps
+            const howtoList = document.getElementById('howto-list');
+            howtoList.innerHTML = '';
+            t.howtoSteps.forEach(step => {
+                const li = document.createElement('li');
+                li.textContent = step;
+                howtoList.appendChild(li);
+            });
+
+            // References
+            const refsList = document.getElementById('refs-list');
+            refsList.innerHTML = '';
+            t.refs.forEach(ref => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = ref.url;
+                a.target = '_blank';
+                a.textContent = ref.text;
+                li.appendChild(a);
+                refsList.appendChild(li);
+            });
+
+            // Update active button
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Save preference
+            localStorage.setItem('preferredLanguage', lang);
+        }
+
+        // Initialize
+        window.onload = function() {
+            const savedLang = localStorage.getItem('preferredLanguage') || detectLanguage();
+            switchLang(savedLang);
+            document.querySelector(`[onclick="switchLang('${savedLang}')"]`).classList.add('active');
+        };
+    </script>
 </body>
 </html>

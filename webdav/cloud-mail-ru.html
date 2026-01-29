@@ -1,175 +1,314 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cloud Mail.ru WebDAV 配置说明</title>
+    <title>Cloud Mail.ru WebDAV Configuration</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans CJK SC", sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f5f5f5;
-            padding: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans CJK SC", "Noto Sans CJK JP", sans-serif;
+            line-height: 1.6; color: #333; background: #f5f5f5; padding: 16px;
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
+        .container { max-width: 800px; margin: 0 auto; }
         .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 24px 20px;
-            border-radius: 12px;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            color: white; padding: 24px 20px; border-radius: 12px; margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15); position: relative;
         }
-        h1 {
-            font-size: 1.8rem;
-            margin-bottom: 8px;
+        .lang-switcher { position: absolute; top: 12px; right: 12px; display: flex; gap: 8px; }
+        .lang-btn {
+            background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3);
+            color: white; padding: 4px 10px; border-radius: 6px; cursor: pointer;
+            font-size: 0.85rem; transition: all 0.3s;
         }
-        .subtitle {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
+        .lang-btn:hover { background: rgba(255,255,255,0.3); }
+        .lang-btn.active { background: rgba(255,255,255,0.9); color: #667eea; font-weight: 600; }
+        h1 { font-size: 1.8rem; margin-bottom: 8px; }
+        .subtitle { font-size: 1rem; opacity: 0.9; }
         .card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background: white; border-radius: 12px; padding: 20px;
+            margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         h2 {
-            color: #667eea;
-            font-size: 1.3rem;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #667eea;
+            color: #667eea; font-size: 1.3rem; margin-bottom: 12px;
+            padding-bottom: 8px; border-bottom: 2px solid #667eea;
         }
         .info-item {
-            margin-bottom: 12px;
-            padding: 12px;
-            background: #f8f9ff;
-            border-left: 4px solid #667eea;
-            border-radius: 4px;
+            margin-bottom: 12px; padding: 12px; background: #f8f9ff;
+            border-left: 4px solid #667eea; border-radius: 4px;
         }
-        .info-label {
-            font-weight: 600;
-            color: #667eea;
-            margin-bottom: 4px;
-        }
+        .info-label { font-weight: 600; color: #667eea; margin-bottom: 4px; }
         .info-value {
             font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Courier New', monospace;
-            color: #333;
-            word-break: break-all;
+            color: #333; word-break: break-all;
         }
         .warning {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 12px;
-            border-radius: 4px;
-            margin-top: 12px;
+            background: #fff3cd; border-left: 4px solid #ffc107;
+            padding: 12px; border-radius: 4px; margin-top: 12px;
         }
         .tip {
-            background: #e7f3ff;
-            border-left: 4px solid #2196F3;
-            padding: 12px;
-            border-radius: 4px;
-            margin-top: 12px;
+            background: #e7f3ff; border-left: 4px solid #2196F3;
+            padding: 12px; border-radius: 4px; margin-top: 12px;
         }
-        .link-list {
-            list-style: none;
-            padding-left: 0;
-        }
-        .link-list li {
-            margin-bottom: 8px;
-        }
-        .link-list a {
-            color: #667eea;
-            text-decoration: none;
-            word-break: break-all;
-        }
-        .link-list a:hover {
-            text-decoration: underline;
-        }
+        .link-list { list-style: none; padding-left: 0; }
+        .link-list li { margin-bottom: 8px; }
+        .link-list a { color: #667eea; text-decoration: none; word-break: break-all; }
+        .link-list a:hover { text-decoration: underline; }
+        ol, ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
         @media (max-width: 480px) {
-            body {
-                padding: 12px;
-            }
-            h1 {
-                font-size: 1.5rem;
-            }
-            .card {
-                padding: 16px;
-            }
+            body { padding: 12px; }
+            h1 { font-size: 1.5rem; }
+            .card { padding: 16px; }
+            .lang-switcher { position: static; margin-top: 12px; justify-content: center; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>Cloud Mail.ru WebDAV 配置</h1>
-            <p class="subtitle">Mail.ru 提供的云存储服务</p>
+            <div class="lang-switcher">
+                <button class="lang-btn" onclick="switchLang('en')">EN</button>
+                <button class="lang-btn" onclick="switchLang('zh')">中文</button>
+                <button class="lang-btn" onclick="switchLang('ja')">日本語</button>
+                <button class="lang-btn" onclick="switchLang('ru')">RU</button>
+            </div>
+            <h1 id="title"></h1>
+            <p class="subtitle" id="subtitle"></p>
         </div>
 
         <div class="card">
-            <h2>📋 默认配置</h2>
+            <h2 id="config-title"></h2>
             <div class="info-item">
-                <div class="info-label">服务器地址</div>
+                <div class="info-label" id="server-label"></div>
                 <div class="info-value">webdav.cloud.mail.ru</div>
             </div>
             <div class="info-item">
-                <div class="info-label">协议</div>
-                <div class="info-value">HTTPS (端口 443)</div>
+                <div class="info-label" id="protocol-label"></div>
+                <div class="info-value">HTTPS (443)</div>
             </div>
             <div class="info-item">
-                <div class="info-label">根路径</div>
+                <div class="info-label" id="path-label"></div>
                 <div class="info-value">/</div>
             </div>
             <div class="info-item">
-                <div class="info-label">认证方式</div>
+                <div class="info-label" id="auth-label"></div>
                 <div class="info-value">Basic Authentication</div>
             </div>
         </div>
 
         <div class="card">
-            <h2>🔑 账号与认证</h2>
-            <p><strong>用户名：</strong>您的 Mail.ru 邮箱地址（完整格式，如 username@mail.ru）</p>
-            <p style="margin-top: 8px;"><strong>密码：</strong>您的 Mail.ru 账户密码</p>
+            <h2 id="account-title"></h2>
+            <p><strong id="username-label"></strong> <span id="username-desc"></span></p>
+            <p style="margin-top: 8px;"><strong id="password-label"></strong> <span id="password-desc"></span></p>
             
             <div class="tip">
-                <strong>💡 提示</strong>
-                <p style="margin-top: 4px;">Mail.ru Cloud 是俄罗斯流行的云存储服务，提供原生 WebDAV 支持。</p>
+                <strong id="tip-title"></strong>
+                <p style="margin-top: 4px;" id="tip-content"></p>
             </div>
         </div>
 
         <div class="card">
-            <h2>⚙️ 配置说明</h2>
-            <ul style="padding-left: 20px;">
-                <li><strong>用户名格式：</strong>必须使用完整邮箱地址（如 user@mail.ru 或 user@inbox.ru）</li>
-                <li><strong>密码：</strong>使用您登录 Mail.ru 的密码</li>
-                <li><strong>连接安全：</strong>始终使用 HTTPS 加密连接</li>
-                <li><strong>存储空间：</strong>根据您的 Mail.ru 账户计划提供不同容量</li>
-            </ul>
+            <h2 id="config-points-title"></h2>
+            <ul id="config-points-list"></ul>
             
             <div class="warning">
-                <strong>⚠️ 注意</strong>
-                <p style="margin-top: 4px;">如果您启用了两步验证，可能需要生成应用专用密码。请在 Mail.ru 安全设置中查看。</p>
+                <strong id="warning-title"></strong>
+                <p style="margin-top: 4px;" id="warning-content"></p>
             </div>
         </div>
 
         <div class="card">
-            <h2>📚 官方参考</h2>
-            <ul class="link-list">
-                <li>📖 <a href="https://help.mail.ru/cloud_web/" target="_blank">Mail.ru Cloud 帮助中心</a></li>
-                <li>🏠 <a href="https://cloud.mail.ru/" target="_blank">Mail.ru Cloud 官网</a></li>
-            </ul>
+            <h2 id="refs-title"></h2>
+            <ul class="link-list" id="refs-list"></ul>
         </div>
     </div>
+
+    <script>
+        const translations = {
+            en: {
+                title: "Cloud Mail.ru WebDAV Configuration",
+                subtitle: "Cloud storage service by Mail.ru",
+                configTitle: "📋 Default Configuration",
+                serverLabel: "Server Address",
+                protocolLabel: "Protocol",
+                pathLabel: "Root Path",
+                authLabel: "Authentication",
+                accountTitle: "🔑 Account & Authentication",
+                usernameLabel: "Username:",
+                usernameDesc: "Your Mail.ru email address (full format, e.g., username@mail.ru)",
+                passwordLabel: "Password:",
+                passwordDesc: "Your Mail.ru account password",
+                tipTitle: "💡 Tip",
+                tipContent: "Mail.ru Cloud is a popular cloud storage service in Russia with native WebDAV support.",
+                configPointsTitle: "⚙️ Configuration Notes",
+                configPoints: [
+                    "Username format: Must use full email address (e.g., user@mail.ru or user@inbox.ru)",
+                    "Password: Use your Mail.ru login password",
+                    "Connection security: Always use HTTPS encrypted connection",
+                    "Storage space: Different capacities provided based on your Mail.ru account plan"
+                ],
+                warningTitle: "⚠️ Note",
+                warningContent: "If you have enabled two-factor authentication, you may need to generate an app-specific password. Please check in Mail.ru security settings.",
+                refsTitle: "📚 Official Reference",
+                refs: [
+                    { text: "📖 Mail.ru Cloud Help Center", url: "https://help.mail.ru/cloud_web/" },
+                    { text: "🏠 Mail.ru Cloud Official Site", url: "https://cloud.mail.ru/" }
+                ]
+            },
+            zh: {
+                title: "Cloud Mail.ru WebDAV 配置",
+                subtitle: "Mail.ru 提供的云存储服务",
+                configTitle: "📋 默认配置",
+                serverLabel: "服务器地址",
+                protocolLabel: "协议",
+                pathLabel: "根路径",
+                authLabel: "认证方式",
+                accountTitle: "🔑 账号与认证",
+                usernameLabel: "用户名：",
+                usernameDesc: "您的 Mail.ru 邮箱地址（完整格式，如 username@mail.ru）",
+                passwordLabel: "密码：",
+                passwordDesc: "您的 Mail.ru 账户密码",
+                tipTitle: "💡 提示",
+                tipContent: "Mail.ru Cloud 是俄罗斯流行的云存储服务，提供原生 WebDAV 支持。",
+                configPointsTitle: "⚙️ 配置说明",
+                configPoints: [
+                    "用户名格式：必须使用完整邮箱地址（如 user@mail.ru 或 user@inbox.ru）",
+                    "密码：使用您登录 Mail.ru 的密码",
+                    "连接安全：始终使用 HTTPS 加密连接",
+                    "存储空间：根据您的 Mail.ru 账户计划提供不同容量"
+                ],
+                warningTitle: "⚠️ 注意",
+                warningContent: "如果您启用了两步验证，可能需要生成应用专用密码。请在 Mail.ru 安全设置中查看。",
+                refsTitle: "📚 官方参考",
+                refs: [
+                    { text: "📖 Mail.ru Cloud 帮助中心", url: "https://help.mail.ru/cloud_web/" },
+                    { text: "🏠 Mail.ru Cloud 官网", url: "https://cloud.mail.ru/" }
+                ]
+            },
+            ja: {
+                title: "Cloud Mail.ru WebDAV 設定",
+                subtitle: "Mail.ru が提供するクラウドストレージサービス",
+                configTitle: "📋 デフォルト設定",
+                serverLabel: "サーバーアドレス",
+                protocolLabel: "プロトコル",
+                pathLabel: "ルートパス",
+                authLabel: "認証方式",
+                accountTitle: "🔑 アカウントと認証",
+                usernameLabel: "ユーザー名：",
+                usernameDesc: "Mail.ru のメールアドレス（完全な形式、例：username@mail.ru）",
+                passwordLabel: "パスワード：",
+                passwordDesc: "Mail.ru アカウントのパスワード",
+                tipTitle: "💡 ヒント",
+                tipContent: "Mail.ru Cloud は、ロシアで人気のあるクラウドストレージサービスで、ネイティブ WebDAV サポートを提供します。",
+                configPointsTitle: "⚙️ 設定の注意事項",
+                configPoints: [
+                    "ユーザー名の形式：完全なメールアドレスを使用する必要があります（例：user@mail.ru または user@inbox.ru）",
+                    "パスワード：Mail.ru にログインするパスワードを使用",
+                    "接続のセキュリティ：常に HTTPS 暗号化接続を使用",
+                    "ストレージ容量：Mail.ru アカウントプランに基づいて異なる容量が提供されます"
+                ],
+                warningTitle: "⚠️ 注意",
+                warningContent: "二要素認証を有効にしている場合は、アプリ専用パスワードを生成する必要がある場合があります。Mail.ru のセキュリティ設定で確認してください。",
+                refsTitle: "📚 公式リファレンス",
+                refs: [
+                    { text: "📖 Mail.ru Cloud ヘルプセンター", url: "https://help.mail.ru/cloud_web/" },
+                    { text: "🏠 Mail.ru Cloud 公式サイト", url: "https://cloud.mail.ru/" }
+                ]
+            },
+            ru: {
+                title: "Настройка Cloud Mail.ru WebDAV",
+                subtitle: "Облачное хранилище от Mail.ru",
+                configTitle: "📋 Конфигурация по умолчанию",
+                serverLabel: "Адрес сервера",
+                protocolLabel: "Протокол",
+                pathLabel: "Корневой путь",
+                authLabel: "Аутентификация",
+                accountTitle: "🔑 Учетная запись и аутентификация",
+                usernameLabel: "Имя пользователя:",
+                usernameDesc: "Ваш адрес электронной почты Mail.ru (полный формат, например, username@mail.ru)",
+                passwordLabel: "Пароль:",
+                passwordDesc: "Пароль вашей учетной записи Mail.ru",
+                tipTitle: "💡 Совет",
+                tipContent: "Mail.ru Cloud — это популярный сервис облачного хранения в России с встроенной поддержкой WebDAV.",
+                configPointsTitle: "⚙️ Примечания по настройке",
+                configPoints: [
+                    "Формат имени пользователя: Необходимо использовать полный адрес электронной почты (например, user@mail.ru или user@inbox.ru)",
+                    "Пароль: Используйте пароль для входа в Mail.ru",
+                    "Безопасность соединения: Всегда используйте зашифрованное соединение HTTPS",
+                    "Объем хранилища: Различная емкость предоставляется в зависимости от вашего плана учетной записи Mail.ru"
+                ],
+                warningTitle: "⚠️ Примечание",
+                warningContent: "Если вы включили двухфакторную аутентификацию, вам может потребоваться создать пароль приложения. Пожалуйста, проверьте в настройках безопасности Mail.ru.",
+                refsTitle: "📚 Официальная справка",
+                refs: [
+                    { text: "📖 Центр помощи Mail.ru Cloud", url: "https://help.mail.ru/cloud_web/" },
+                    { text: "🏠 Официальный сайт Mail.ru Cloud", url: "https://cloud.mail.ru/" }
+                ]
+            }
+        };
+
+        function detectLanguage() {
+            const browserLang = navigator.language || navigator.userLanguage;
+            const langCode = browserLang.toLowerCase().split('-')[0];
+            return translations[langCode] ? langCode : 'en';
+        }
+
+        function switchLang(lang) {
+            const t = translations[lang];
+            if (!t) return;
+
+            document.documentElement.lang = lang;
+            document.getElementById('title').textContent = t.title;
+            document.getElementById('subtitle').textContent = t.subtitle;
+            document.getElementById('config-title').textContent = t.configTitle;
+            document.getElementById('server-label').textContent = t.serverLabel;
+            document.getElementById('protocol-label').textContent = t.protocolLabel;
+            document.getElementById('path-label').textContent = t.pathLabel;
+            document.getElementById('auth-label').textContent = t.authLabel;
+            document.getElementById('account-title').textContent = t.accountTitle;
+            document.getElementById('username-label').textContent = t.usernameLabel;
+            document.getElementById('username-desc').textContent = t.usernameDesc;
+            document.getElementById('password-label').textContent = t.passwordLabel;
+            document.getElementById('password-desc').textContent = t.passwordDesc;
+            document.getElementById('tip-title').textContent = t.tipTitle;
+            document.getElementById('tip-content').textContent = t.tipContent;
+            document.getElementById('config-points-title').textContent = t.configPointsTitle;
+            document.getElementById('warning-title').textContent = t.warningTitle;
+            document.getElementById('warning-content').textContent = t.warningContent;
+            document.getElementById('refs-title').textContent = t.refsTitle;
+
+            const configPointsList = document.getElementById('config-points-list');
+            configPointsList.innerHTML = '';
+            t.configPoints.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                configPointsList.appendChild(li);
+            });
+
+            const refsList = document.getElementById('refs-list');
+            refsList.innerHTML = '';
+            t.refs.forEach(ref => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = ref.url;
+                a.target = '_blank';
+                a.textContent = ref.text;
+                li.appendChild(a);
+                refsList.appendChild(li);
+            });
+
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            localStorage.setItem('preferredLanguage', lang);
+        }
+
+        window.onload = function() {
+            const savedLang = localStorage.getItem('preferredLanguage') || detectLanguage();
+            switchLang(savedLang);
+            document.querySelector(`[onclick="switchLang('${savedLang}')"]`).classList.add('active');
+        };
+    </script>
 </body>
 </html>
