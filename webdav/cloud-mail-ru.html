@@ -11,19 +11,19 @@
             line-height: 1.6; color: #333; background: #f5f5f5; padding: 16px;
         }
         .container { max-width: 800px; margin: 0 auto; }
+        .lang-switcher { display: flex; gap: 8px; justify-content: center; margin-bottom: 16px; }
+        .lang-btn {
+            background: rgba(102,126,234,0.1); border: 1px solid #667eea;
+            color: #667eea; padding: 6px 14px; border-radius: 6px; cursor: pointer;
+            font-size: 0.9rem; transition: all 0.3s; font-weight: 500;
+        }
+        .lang-btn:hover { background: rgba(102,126,234,0.2); }
+        .lang-btn.active { background: #667eea; color: white; font-weight: 600; }
         .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white; padding: 24px 20px; border-radius: 12px; margin-bottom: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15); position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
-        .lang-switcher { position: absolute; top: 12px; right: 12px; display: flex; gap: 8px; }
-        .lang-btn {
-            background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3);
-            color: white; padding: 4px 10px; border-radius: 6px; cursor: pointer;
-            font-size: 0.85rem; transition: all 0.3s;
-        }
-        .lang-btn:hover { background: rgba(255,255,255,0.3); }
-        .lang-btn.active { background: rgba(255,255,255,0.9); color: #667eea; font-weight: 600; }
         h1 { font-size: 1.8rem; margin-bottom: 8px; }
         .subtitle { font-size: 1rem; opacity: 0.9; }
         .card {
@@ -61,19 +61,19 @@
             body { padding: 12px; }
             h1 { font-size: 1.5rem; }
             .card { padding: 16px; }
-            .lang-switcher { position: static; margin-top: 12px; justify-content: center; }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="lang-switcher">
+            <button class="lang-btn" onclick="switchLang('en')">EN</button>
+            <button class="lang-btn" onclick="switchLang('zh')">中文</button>
+            <button class="lang-btn" onclick="switchLang('ja')">日本語</button>
+            <button class="lang-btn" onclick="switchLang('ru')">RU</button>
+        </div>
+        
         <div class="header">
-            <div class="lang-switcher">
-                <button class="lang-btn" onclick="switchLang('en')">EN</button>
-                <button class="lang-btn" onclick="switchLang('zh')">中文</button>
-                <button class="lang-btn" onclick="switchLang('ja')">日本語</button>
-                <button class="lang-btn" onclick="switchLang('ru')">RU</button>
-            </div>
             <h1 id="title"></h1>
             <p class="subtitle" id="subtitle"></p>
         </div>

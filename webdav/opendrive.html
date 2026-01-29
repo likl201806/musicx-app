@@ -1,2 +1,313 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>OpenDrive WebDAV</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans CJK SC","Noto Sans CJK JP",sans-serif;line-height:1.6;color:#333;background:#f5f5f5;padding:16px}.container{max-width:800px;margin:0 auto}.header{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;padding:24px 20px;border-radius:12px;margin-bottom:16px;box-shadow:0 4px 12px rgba(0,0,0,0.15);position:relative}.lang-switcher{position:absolute;top:12px;right:12px;display:flex;gap:8px}.lang-btn{background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);color:white;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:0.85rem;transition:all 0.3s}.lang-btn:hover{background:rgba(255,255,255,0.3)}.lang-btn.active{background:rgba(255,255,255,0.9);color:#667eea;font-weight:600}h1{font-size:1.8rem;margin-bottom:8px}.subtitle{font-size:1rem;opacity:0.9}.card{background:white;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}h2{color:#667eea;font-size:1.3rem;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #667eea}.info-item{margin-bottom:12px;padding:12px;background:#f8f9ff;border-left:4px solid #667eea;border-radius:4px}.info-label{font-weight:600;color:#667eea;margin-bottom:4px}.info-value{font-family:'SF Mono',Monaco,'Cascadia Code','Courier New',monospace;color:#333;word-break:break-all}.warning{background:#fff3cd;border-left:4px solid #ffc107;padding:12px;border-radius:4px;margin-top:12px}.tip{background:#e7f3ff;border-left:4px solid #2196F3;padding:12px;border-radius:4px;margin-top:12px}.link-list{list-style:none;padding-left:0}.link-list li{margin-bottom:8px}.link-list a{color:#667eea;text-decoration:none;word-break:break-all}.link-list a:hover{text-decoration:underline}ol,ul{padding-left:20px}li{margin-bottom:8px}@media (max-width:480px){body{padding:12px}h1{font-size:1.5rem}.card{padding:16px}.lang-switcher{position:static;margin-top:12px;justify-content:center}}</style></head><body><div class="container"><div class="header"><div class="lang-switcher"><button class="lang-btn" onclick="switchLang('en')">EN</button><button class="lang-btn" onclick="switchLang('zh')">中文</button><button class="lang-btn" onclick="switchLang('ja')">日本語</button><button class="lang-btn" onclick="switchLang('ru')">RU</button></div><h1 id="title"></h1><p class="subtitle" id="subtitle"></p></div><div class="card"><h2 id="config-title"></h2><div class="info-item"><div class="info-label" id="server-label"></div><div class="info-value">webdav.opendrive.com</div></div><div class="info-item"><div class="info-label" id="protocol-label"></div><div class="info-value">HTTPS (443)</div></div><div class="info-item"><div class="info-label" id="path-label"></div><div class="info-value">/</div></div><div class="info-item"><div class="info-label" id="auth-label"></div><div class="info-value">Basic Authentication</div></div></div><div class="card"><h2 id="account-title"></h2><p><strong id="username-label"></strong> <span id="username-desc"></span></p><p style="margin-top:8px"><strong id="password-label"></strong> <span id="password-desc"></span></p><div class="tip"><strong id="tip-title"></strong><p style="margin-top:4px" id="tip-content"></p></div></div><div class="card"><h2 id="config-points-title"></h2><ul id="config-points-list"></ul><div class="warning"><strong id="warning-title"></strong><p style="margin-top:4px" id="warning-content"></p></div></div><div class="card"><h2 id="refs-title"></h2><ul class="link-list" id="refs-list"></ul></div></div><script>const translations={en:{title:"OpenDrive WebDAV Configuration",subtitle:"Cloud storage and file sharing service",configTitle:"📋 Default Configuration",serverLabel:"Server Address",protocolLabel:"Protocol",pathLabel:"Root Path",authLabel:"Authentication",accountTitle:"🔑 Account & Authentication",usernameLabel:"Username:",usernameDesc:"Your OpenDrive username (usually email)",passwordLabel:"Password:",passwordDesc:"Your OpenDrive account password",tipTitle:"💡 Tip",tipContent:"OpenDrive provides simple WebDAV access using your regular account credentials.",configPointsTitle:"⚙️ Configuration Points",configPoints:["Server Address: Use webdav.opendrive.com without http:// or https:// prefix","Protocol: Must use HTTPS for security","Port: Standard HTTPS port 443","Root Path: Use root directory / to access all files"],warningTitle:"⚠️ Note",warningContent:"WebDAV functionality may require a paid account. Please check your OpenDrive subscription plan.",refsTitle:"📚 Official Reference",refs:[{text:"📖 OpenDrive FAQ",url:"https://www.opendrive.com/faq"},{text:"🏠 OpenDrive Official Site",url:"https://www.opendrive.com/"}]},zh:{title:"OpenDrive WebDAV 配置",subtitle:"云存储与文件共享服务",configTitle:"📋 默认配置",serverLabel:"服务器地址",protocolLabel:"协议",pathLabel:"根路径",authLabel:"认证方式",accountTitle:"🔑 账号与认证",usernameLabel:"用户名：",usernameDesc:"您的 OpenDrive 账户用户名（通常是邮箱）",passwordLabel:"密码：",passwordDesc:"您的 OpenDrive 账户密码",tipTitle:"💡 提示",tipContent:"OpenDrive 提供简单直接的 WebDAV 访问，使用您的常规账户凭据即可。",configPointsTitle:"⚙️ 配置要点",configPoints:["服务器地址：确保使用 webdav.opendrive.com，不要包含 http:// 或 https:// 前缀","协议：必须使用 HTTPS 以确保安全","端口：标准 HTTPS 端口 443","根路径：使用根目录 / 即可访问所有文件"],warningTitle:"⚠️ 注意",warningContent:"WebDAV 功能可能需要付费账户才能使用。请查看您的 OpenDrive 订阅计划。",refsTitle:"📚 官方参考",refs:[{text:"📖 OpenDrive 常见问题",url:"https://www.opendrive.com/faq"},{text:"🏠 OpenDrive 官网",url:"https://www.opendrive.com/"}]},ja:{title:"OpenDrive WebDAV 設定",subtitle:"クラウドストレージとファイル共有サービス",configTitle:"📋 デフォルト設定",serverLabel:"サーバーアドレス",protocolLabel:"プロトコル",pathLabel:"ルートパス",authLabel:"認証方式",accountTitle:"🔑 アカウントと認証",usernameLabel:"ユーザー名：",usernameDesc:"OpenDrive ユーザー名（通常はメールアドレス）",passwordLabel:"パスワード：",passwordDesc:"OpenDrive アカウントパスワード",tipTitle:"💡 ヒント",tipContent:"OpenDrive は通常のアカウント認証情報を使用して簡単な WebDAV アクセスを提供します。",configPointsTitle:"⚙️ 設定のポイント",configPoints:["サーバーアドレス：http:// または https:// プレフィックスなしで webdav.opendrive.com を使用","プロトコル：セキュリティのために HTTPS を使用する必要があります","ポート：標準 HTTPS ポート 443","ルートパス：すべてのファイルにアクセスするにはルートディレクトリ / を使用"],warningTitle:"⚠️ 注意",warningContent:"WebDAV 機能を使用するには有料アカウントが必要な場合があります。OpenDrive サブスクリプションプランを確認してください。",refsTitle:"📚 公式リファレンス",refs:[{text:"📖 OpenDrive FAQ",url:"https://www.opendrive.com/faq"},{text:"🏠 OpenDrive 公式サイト",url:"https://www.opendrive.com/"}]},ru:{title:"Настройка OpenDrive WebDAV",subtitle:"Облачное хранилище и служба обмена файлами",configTitle:"📋 Конфигурация по умолчанию",serverLabel:"Адрес сервера",protocolLabel:"Протокол",pathLabel:"Корневой путь",authLabel:"Аутентификация",accountTitle:"🔑 Учетная запись и аутентификация",usernameLabel:"Имя пользователя:",usernameDesc:"Ваше имя пользователя OpenDrive (обычно email)",passwordLabel:"Пароль:",passwordDesc:"Пароль вашей учетной записи OpenDrive",tipTitle:"💡 Совет",tipContent:"OpenDrive предоставляет простой доступ WebDAV с использованием обычных учетных данных.",configPointsTitle:"⚙️ Ключевые точки настройки",configPoints:["Адрес сервера: Используйте webdav.opendrive.com без префикса http:// или https://","Протокол: Для безопасности необходимо использовать HTTPS","Порт: Стандартный порт HTTPS 443","Корневой путь: Используйте корневой каталог / для доступа ко всем файлам"],warningTitle:"⚠️ Примечание",warningContent:"Для использования функции WebDAV может потребоваться платная учетная запись. Пожалуйста, проверьте ваш план подписки OpenDrive.",refsTitle:"📚 Официальная справка",refs:[{text:"📖 OpenDrive FAQ",url:"https://www.opendrive.com/faq"},{text:"🏠 Официальный сайт OpenDrive",url:"https://www.opendrive.com/"}]}};function detectLanguage(){const browserLang=navigator.language||navigator.userLanguage;const langCode=browserLang.toLowerCase().split('-')[0];return translations[langCode]?langCode:'en'}function switchLang(lang){const t=translations[lang];if(!t)return;document.documentElement.lang=lang;document.getElementById('title').textContent=t.title;document.getElementById('subtitle').textContent=t.subtitle;document.getElementById('config-title').textContent=t.configTitle;document.getElementById('server-label').textContent=t.serverLabel;document.getElementById('protocol-label').textContent=t.protocolLabel;document.getElementById('path-label').textContent=t.pathLabel;document.getElementById('auth-label').textContent=t.authLabel;document.getElementById('account-title').textContent=t.accountTitle;document.getElementById('username-label').textContent=t.usernameLabel;document.getElementById('username-desc').textContent=t.usernameDesc;document.getElementById('password-label').textContent=t.passwordLabel;document.getElementById('password-desc').textContent=t.passwordDesc;document.getElementById('tip-title').textContent=t.tipTitle;document.getElementById('tip-content').textContent=t.tipContent;document.getElementById('config-points-title').textContent=t.configPointsTitle;document.getElementById('warning-title').textContent=t.warningTitle;document.getElementById('warning-content').textContent=t.warningContent;document.getElementById('refs-title').textContent=t.refsTitle;const configPointsList=document.getElementById('config-points-list');configPointsList.innerHTML='';t.configPoints.forEach(item=>{const li=document.createElement('li');li.textContent=item;configPointsList.appendChild(li)});const refsList=document.getElementById('refs-list');refsList.innerHTML='';t.refs.forEach(ref=>{const li=document.createElement('li');const a=document.createElement('a');a.href=ref.url;a.target='_blank';a.textContent=ref.text;li.appendChild(a);refsList.appendChild(li)});document.querySelectorAll('.lang-btn').forEach(btn=>btn.classList.remove('active'));event.target.classList.add('active');localStorage.setItem('preferredLanguage',lang)}window.onload=function(){const savedLang=localStorage.getItem('preferredLanguage')||detectLanguage();switchLang(savedLang);document.querySelector(`[onclick="switchLang('${savedLang}')"]`).classList.add('active')}</script></body></html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenDrive WebDAV Configuration</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans CJK SC", "Noto Sans CJK JP", sans-serif;
+            line-height: 1.6; color: #333; background: #f5f5f5; padding: 16px;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        .lang-switcher { display: flex; gap: 8px; justify-content: center; margin-bottom: 16px; }
+        .lang-btn {
+            background: rgba(102,126,234,0.1); border: 1px solid #667eea;
+            color: #667eea; padding: 6px 14px; border-radius: 6px; cursor: pointer;
+            font-size: 0.9rem; transition: all 0.3s; font-weight: 500;
+        }
+        .lang-btn:hover { background: rgba(102,126,234,0.2); }
+        .lang-btn.active { background: #667eea; color: white; font-weight: 600; }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; padding: 24px 20px; border-radius: 12px; margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        h1 { font-size: 1.8rem; margin-bottom: 8px; }
+        .subtitle { font-size: 1rem; opacity: 0.9; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px;
+            margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #667eea; font-size: 1.3rem; margin-bottom: 12px;
+            padding-bottom: 8px; border-bottom: 2px solid #667eea;
+        }
+        .info-item {
+            margin-bottom: 12px; padding: 12px; background: #f8f9ff;
+            border-left: 4px solid #667eea; border-radius: 4px;
+        }
+        .info-label { font-weight: 600; color: #667eea; margin-bottom: 4px; }
+        .info-value {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Courier New', monospace;
+            color: #333; word-break: break-all;
+        }
+        .warning {
+            background: #fff3cd; border-left: 4px solid #ffc107;
+            padding: 12px; border-radius: 4px; margin-top: 12px;
+        }
+        .tip {
+            background: #e7f3ff; border-left: 4px solid #2196F3;
+            padding: 12px; border-radius: 4px; margin-top: 12px;
+        }
+        .link-list { list-style: none; padding-left: 0; }
+        .link-list li { margin-bottom: 8px; }
+        .link-list a { color: #667eea; text-decoration: none; word-break: break-all; }
+        .link-list a:hover { text-decoration: underline; }
+        ol, ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
+        @media (max-width: 480px) {
+            body { padding: 12px; }
+            h1 { font-size: 1.5rem; }
+            .card { padding: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="lang-switcher">
+            <button class="lang-btn" onclick="switchLang('en')">EN</button>
+            <button class="lang-btn" onclick="switchLang('zh')">中文</button>
+            <button class="lang-btn" onclick="switchLang('ja')">日本語</button>
+            <button class="lang-btn" onclick="switchLang('ru')">RU</button>
+        </div>
+        
+        <div class="header">
+            <h1 id="title"></h1>
+            <p class="subtitle" id="subtitle"></p>
+        </div>
+
+        <div class="card">
+            <h2 id="config-title"></h2>
+            <div class="info-item">
+                <div class="info-label" id="server-label"></div>
+                <div class="info-value">webdav.opendrive.com</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label" id="protocol-label"></div>
+                <div class="info-value">HTTPS (443)</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label" id="path-label"></div>
+                <div class="info-value">/</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label" id="auth-label"></div>
+                <div class="info-value">Basic Authentication</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 id="account-title"></h2>
+            <p><strong id="username-label"></strong> <span id="username-desc"></span></p>
+            <p style="margin-top: 8px;"><strong id="password-label"></strong> <span id="password-desc"></span></p>
+            
+            <div class="tip">
+                <strong id="tip-title"></strong>
+                <p style="margin-top: 4px;" id="tip-content"></p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 id="config-points-title"></h2>
+            <ul id="config-points-list"></ul>
+            
+            <div class="warning">
+                <strong id="warning-title"></strong>
+                <p style="margin-top: 4px;" id="warning-content"></p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 id="refs-title"></h2>
+            <ul class="link-list" id="refs-list"></ul>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                title: "OpenDrive WebDAV Configuration",
+                subtitle: "Cloud storage and file sharing service",
+                configTitle: "📋 Default Configuration",
+                serverLabel: "Server Address",
+                protocolLabel: "Protocol",
+                pathLabel: "Root Path",
+                authLabel: "Authentication",
+                accountTitle: "🔑 Account & Authentication",
+                usernameLabel: "Username:",
+                usernameDesc: "Your OpenDrive username (usually email)",
+                passwordLabel: "Password:",
+                passwordDesc: "Your OpenDrive account password",
+                tipTitle: "💡 Tip",
+                tipContent: "OpenDrive provides simple WebDAV access using your regular account credentials.",
+                configPointsTitle: "⚙️ Configuration Points",
+                configPoints: [
+                    "Server Address: Use webdav.opendrive.com without http:// or https:// prefix",
+                    "Protocol: Must use HTTPS for security",
+                    "Port: Standard HTTPS port 443",
+                    "Root Path: Use root directory / to access all files"
+                ],
+                warningTitle: "⚠️ Note",
+                warningContent: "WebDAV functionality may require a paid account. Please check your OpenDrive subscription plan.",
+                refsTitle: "📚 Official Reference",
+                refs: [
+                    { text: "📖 OpenDrive FAQ", url: "https://www.opendrive.com/faq" },
+                    { text: "🏠 OpenDrive Official Site", url: "https://www.opendrive.com/" }
+                ]
+            },
+            zh: {
+                title: "OpenDrive WebDAV 配置",
+                subtitle: "云存储与文件共享服务",
+                configTitle: "📋 默认配置",
+                serverLabel: "服务器地址",
+                protocolLabel: "协议",
+                pathLabel: "根路径",
+                authLabel: "认证方式",
+                accountTitle: "🔑 账号与认证",
+                usernameLabel: "用户名：",
+                usernameDesc: "您的 OpenDrive 账户用户名（通常是邮箱）",
+                passwordLabel: "密码：",
+                passwordDesc: "您的 OpenDrive 账户密码",
+                tipTitle: "💡 提示",
+                tipContent: "OpenDrive 提供简单直接的 WebDAV 访问，使用您的常规账户凭据即可。",
+                configPointsTitle: "⚙️ 配置要点",
+                configPoints: [
+                    "服务器地址：确保使用 webdav.opendrive.com，不要包含 http:// 或 https:// 前缀",
+                    "协议：必须使用 HTTPS 以确保安全",
+                    "端口：标准 HTTPS 端口 443",
+                    "根路径：使用根目录 / 即可访问所有文件"
+                ],
+                warningTitle: "⚠️ 注意",
+                warningContent: "WebDAV 功能可能需要付费账户才能使用。请查看您的 OpenDrive 订阅计划。",
+                refsTitle: "📚 官方参考",
+                refs: [
+                    { text: "📖 OpenDrive 常见问题", url: "https://www.opendrive.com/faq" },
+                    { text: "🏠 OpenDrive 官网", url: "https://www.opendrive.com/" }
+                ]
+            },
+            ja: {
+                title: "OpenDrive WebDAV 設定",
+                subtitle: "クラウドストレージとファイル共有サービス",
+                configTitle: "📋 デフォルト設定",
+                serverLabel: "サーバーアドレス",
+                protocolLabel: "プロトコル",
+                pathLabel: "ルートパス",
+                authLabel: "認証方式",
+                accountTitle: "🔑 アカウントと認証",
+                usernameLabel: "ユーザー名：",
+                usernameDesc: "OpenDrive ユーザー名（通常はメールアドレス）",
+                passwordLabel: "パスワード：",
+                passwordDesc: "OpenDrive アカウントパスワード",
+                tipTitle: "💡 ヒント",
+                tipContent: "OpenDrive は通常のアカウント認証情報を使用して簡単な WebDAV アクセスを提供します。",
+                configPointsTitle: "⚙️ 設定のポイント",
+                configPoints: [
+                    "サーバーアドレス：http:// または https:// プレフィックスなしで webdav.opendrive.com を使用",
+                    "プロトコル：セキュリティのために HTTPS を使用する必要があります",
+                    "ポート：標準 HTTPS ポート 443",
+                    "ルートパス：すべてのファイルにアクセスするにはルートディレクトリ / を使用"
+                ],
+                warningTitle: "⚠️ 注意",
+                warningContent: "WebDAV 機能を使用するには有料アカウントが必要な場合があります。OpenDrive サブスクリプションプランを確認してください。",
+                refsTitle: "📚 公式リファレンス",
+                refs: [
+                    { text: "📖 OpenDrive FAQ", url: "https://www.opendrive.com/faq" },
+                    { text: "🏠 OpenDrive 公式サイト", url: "https://www.opendrive.com/" }
+                ]
+            },
+            ru: {
+                title: "Настройка OpenDrive WebDAV",
+                subtitle: "Облачное хранилище и служба обмена файлами",
+                configTitle: "📋 Конфигурация по умолчанию",
+                serverLabel: "Адрес сервера",
+                protocolLabel: "Протокол",
+                pathLabel: "Корневой путь",
+                authLabel: "Аутентификация",
+                accountTitle: "🔑 Учетная запись и аутентификация",
+                usernameLabel: "Имя пользователя:",
+                usernameDesc: "Ваше имя пользователя OpenDrive (обычно email)",
+                passwordLabel: "Пароль:",
+                passwordDesc: "Пароль вашей учетной записи OpenDrive",
+                tipTitle: "💡 Совет",
+                tipContent: "OpenDrive предоставляет простой доступ WebDAV с использованием обычных учетных данных.",
+                configPointsTitle: "⚙️ Ключевые точки настройки",
+                configPoints: [
+                    "Адрес сервера: Используйте webdav.opendrive.com без префикса http:// или https://",
+                    "Протокол: Для безопасности необходимо использовать HTTPS",
+                    "Порт: Стандартный порт HTTPS 443",
+                    "Корневой путь: Используйте корневой каталог / для доступа ко всем файлам"
+                ],
+                warningTitle: "⚠️ Примечание",
+                warningContent: "Для использования функции WebDAV может потребоваться платная учетная запись. Пожалуйста, проверьте ваш план подписки OpenDrive.",
+                refsTitle: "📚 Официальная справка",
+                refs: [
+                    { text: "📖 OpenDrive FAQ", url: "https://www.opendrive.com/faq" },
+                    { text: "🏠 Официальный сайт OpenDrive", url: "https://www.opendrive.com/" }
+                ]
+            }
+        };
+
+        function detectLanguage() {
+            const browserLang = navigator.language || navigator.userLanguage;
+            const langCode = browserLang.toLowerCase().split('-')[0];
+            return translations[langCode] ? langCode : 'en';
+        }
+
+        function switchLang(lang) {
+            const t = translations[lang];
+            if (!t) return;
+            document.documentElement.lang = lang;
+            document.getElementById('title').textContent = t.title;
+            document.getElementById('subtitle').textContent = t.subtitle;
+            document.getElementById('config-title').textContent = t.configTitle;
+            document.getElementById('server-label').textContent = t.serverLabel;
+            document.getElementById('protocol-label').textContent = t.protocolLabel;
+            document.getElementById('path-label').textContent = t.pathLabel;
+            document.getElementById('auth-label').textContent = t.authLabel;
+            document.getElementById('account-title').textContent = t.accountTitle;
+            document.getElementById('username-label').textContent = t.usernameLabel;
+            document.getElementById('username-desc').textContent = t.usernameDesc;
+            document.getElementById('password-label').textContent = t.passwordLabel;
+            document.getElementById('password-desc').textContent = t.passwordDesc;
+            document.getElementById('tip-title').textContent = t.tipTitle;
+            document.getElementById('tip-content').textContent = t.tipContent;
+            document.getElementById('config-points-title').textContent = t.configPointsTitle;
+            document.getElementById('warning-title').textContent = t.warningTitle;
+            document.getElementById('warning-content').textContent = t.warningContent;
+            document.getElementById('refs-title').textContent = t.refsTitle;
+
+            const configPointsList = document.getElementById('config-points-list');
+            configPointsList.innerHTML = '';
+            t.configPoints.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                configPointsList.appendChild(li);
+            });
+
+            const refsList = document.getElementById('refs-list');
+            refsList.innerHTML = '';
+            t.refs.forEach(ref => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = ref.url;
+                a.target = '_blank';
+                a.textContent = ref.text;
+                li.appendChild(a);
+                refsList.appendChild(li);
+            });
+
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            localStorage.setItem('preferredLanguage', lang);
+        }
+
+        window.onload = function() {
+            const savedLang = localStorage.getItem('preferredLanguage') || detectLanguage();
+            switchLang(savedLang);
+            document.querySelector(`[onclick="switchLang('${savedLang}')"]`).classList.add('active');
+        };
+    </script>
+</body>
+</html>
