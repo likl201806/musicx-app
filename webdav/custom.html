@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自定义 WebDAV 配置说明</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans CJK SC", sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            padding: 16px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 24px 20px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #667eea;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #667eea;
+        }
+        .info-item {
+            margin-bottom: 12px;
+            padding: 12px;
+            background: #f8f9ff;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 4px;
+        }
+        .info-value {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Courier New', monospace;
+            color: #333;
+            word-break: break-all;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 12px;
+        }
+        .tip {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 12px;
+        }
+        .link-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        .link-list li {
+            margin-bottom: 8px;
+        }
+        .link-list a {
+            color: #667eea;
+            text-decoration: none;
+            word-break: break-all;
+        }
+        .link-list a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 480px) {
+            body {
+                padding: 12px;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            .card {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>自定义 WebDAV 配置</h1>
+            <p class="subtitle">连接任意 WebDAV 服务器</p>
+        </div>
+
+        <div class="card">
+            <h2>📋 配置说明</h2>
+            <p>自定义 WebDAV 允许您连接任何支持 WebDAV 协议的服务器，包括：</p>
+            <ul style="padding-left: 20px; margin-top: 8px;">
+                <li>自建 WebDAV 服务器（Apache、Nginx、Caddy 等）</li>
+                <li>NAS 设备（Synology、QNAP、FreeNAS 等）</li>
+                <li>其他云存储服务的 WebDAV 接口</li>
+                <li>企业内部文件服务器</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🔧 必填配置项</h2>
+            <div class="info-item">
+                <div class="info-label">服务器地址</div>
+                <div class="info-value">主机名或 IP 地址（如 example.com 或 192.168.1.100）</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">协议</div>
+                <div class="info-value">HTTPS（推荐）或 HTTP</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">端口</div>
+                <div class="info-value">HTTPS: 443，HTTP: 80（或自定义端口）</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">根路径</div>
+                <div class="info-value">WebDAV 服务路径（如 /webdav、/remote.php/dav 等）</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">用户名</div>
+                <div class="info-value">您的 WebDAV 账户用户名</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">密码</div>
+                <div class="info-value">您的 WebDAV 账户密码或应用专用密码</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>⚙️ 常见 WebDAV 服务配置示例</h2>
+            
+            <h3 style="font-size: 1.1rem; margin-top: 16px; margin-bottom: 8px; color: #667eea;">Nextcloud</h3>
+            <ul style="padding-left: 20px;">
+                <li>服务器：<code>your-domain.com</code></li>
+                <li>协议：HTTPS</li>
+                <li>端口：443</li>
+                <li>根路径：<code>/remote.php/dav/files/USERNAME/</code></li>
+            </ul>
+
+            <h3 style="font-size: 1.1rem; margin-top: 16px; margin-bottom: 8px; color: #667eea;">ownCloud</h3>
+            <ul style="padding-left: 20px;">
+                <li>服务器：<code>your-domain.com</code></li>
+                <li>协议：HTTPS</li>
+                <li>端口：443</li>
+                <li>根路径：<code>/remote.php/webdav/</code></li>
+            </ul>
+
+            <h3 style="font-size: 1.1rem; margin-top: 16px; margin-bottom: 8px; color: #667eea;">Apache/Nginx WebDAV</h3>
+            <ul style="padding-left: 20px;">
+                <li>服务器：根据您的配置</li>
+                <li>协议：建议 HTTPS</li>
+                <li>端口：根据您的配置</li>
+                <li>根路径：根据您的配置（如 <code>/webdav</code>）</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🔐 安全建议</h2>
+            <ul style="padding-left: 20px;">
+                <li><strong>使用 HTTPS：</strong>避免密码在网络传输中被窃取</li>
+                <li><strong>强密码：</strong>使用复杂且唯一的密码</li>
+                <li><strong>应用密码：</strong>如果服务器支持，使用应用专用密码而非主密码</li>
+                <li><strong>定期更新：</strong>保持服务器软件和固件为最新版本</li>
+                <li><strong>限制权限：</strong>为 WebDAV 账户仅授予必要的文件夹访问权限</li>
+            </ul>
+            
+            <div class="warning">
+                <strong>⚠️ 重要提示</strong>
+                <p style="margin-top: 4px;">连接到自托管服务器时，请确保您信任该服务器。不要在不受信任的服务器上输入敏感凭据。</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔍 常见问题</h2>
+            
+            <h3 style="font-size: 1.05rem; margin-bottom: 8px; color: #333;">Q: 连接失败怎么办？</h3>
+            <p style="margin-bottom: 12px;">A: 请检查：</p>
+            <ul style="padding-left: 20px; margin-bottom: 16px;">
+                <li>服务器地址、端口、路径是否正确</li>
+                <li>用户名和密码是否正确</li>
+                <li>服务器的 WebDAV 功能是否已启用</li>
+                <li>防火墙是否阻止了连接</li>
+                <li>使用 HTTP 还是 HTTPS（与服务器配置匹配）</li>
+            </ul>
+
+            <h3 style="font-size: 1.05rem; margin-bottom: 8px; color: #333;">Q: 根路径应该填什么？</h3>
+            <p style="margin-bottom: 16px;">A: 根路径取决于您的 WebDAV 服务器配置。常见值包括：<code>/</code>、<code>/webdav</code>、<code>/remote.php/dav/files/USERNAME/</code> 等。请查阅您的服务器文档。</p>
+
+            <h3 style="font-size: 1.05rem; margin-bottom: 8px; color: #333;">Q: 可以使用 HTTP 吗？</h3>
+            <p>A: 技术上可以，但<strong>强烈不推荐</strong>。HTTP 不加密，您的用户名和密码会以明文传输。仅在局域网内测试时使用 HTTP。</p>
+        </div>
+
+        <div class="card">
+            <h2>📚 参考资源</h2>
+            <ul class="link-list">
+                <li>📖 <a href="https://en.wikipedia.org/wiki/WebDAV" target="_blank">WebDAV 协议说明（维基百科）</a></li>
+                <li>🔧 <a href="https://docs.nextcloud.com/server/latest/user_manual/en/files/access_webdav.html" target="_blank">Nextcloud WebDAV 文档</a></li>
+                <li>🔧 <a href="https://doc.owncloud.com/server/next/user_manual/files/access_webdav.html" target="_blank">ownCloud WebDAV 文档</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfiniCLOUD WebDAV 配置说明</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans CJK SC", sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            padding: 16px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 24px 20px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #667eea;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #667eea;
+        }
+        .info-item {
+            margin-bottom: 12px;
+            padding: 12px;
+            background: #f8f9ff;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 4px;
+        }
+        .info-value {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Courier New', monospace;
+            color: #333;
+            word-break: break-all;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 12px;
+        }
+        .tip {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 12px;
+        }
+        .link-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        .link-list li {
+            margin-bottom: 8px;
+        }
+        .link-list a {
+            color: #667eea;
+            text-decoration: none;
+            word-break: break-all;
+        }
+        .link-list a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 480px) {
+            body {
+                padding: 12px;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            .card {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>InfiniCLOUD WebDAV 配置</h1>
+            <p class="subtitle">原 TeraCLOUD，提供免费 WebDAV 云存储</p>
+        </div>
+
+        <div class="card">
+            <h2>📋 默认配置</h2>
+            <div class="info-item">
+                <div class="info-label">服务器地址（示例）</div>
+                <div class="info-value">yaene.infini-cloud.net</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">协议</div>
+                <div class="info-value">HTTPS (端口 443)</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">根路径</div>
+                <div class="info-value">/dav/</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">认证方式</div>
+                <div class="info-value">Basic Authentication</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔑 账号与认证</h2>
+            <p><strong>用户名：</strong>您的 InfiniCLOUD 注册邮箱</p>
+            <p style="margin-top: 8px;"><strong>密码：</strong>您的 InfiniCLOUD 账户密码</p>
+            
+            <div class="tip">
+                <strong>💡 重要提示</strong>
+                <p style="margin-top: 4px;">InfiniCLOUD 采用分布式节点架构，每个用户的服务器地址前缀不同。您需要登录 My Page 查看自己的 WebDAV 服务器地址。</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🌐 如何获取服务器地址</h2>
+            <ol style="padding-left: 20px;">
+                <li>登录 InfiniCLOUD 官网</li>
+                <li>进入 My Page（我的页面）</li>
+                <li>查找 WebDAV 配置信息</li>
+                <li>复制您的专属服务器地址（格式如：<code>节点名.infini-cloud.net</code> 或 <code>节点名.teracloud.jp</code>）</li>
+            </ol>
+            
+            <div class="warning">
+                <strong>⚠️ 注意</strong>
+                <p style="margin-top: 4px;">不同用户的节点前缀不同，请勿使用他人的服务器地址。应用中的默认值仅供参考。</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📚 官方参考</h2>
+            <ul class="link-list">
+                <li>📖 <a href="https://infini-cloud.net/en/modules/mypage/usage/" target="_blank">InfiniCLOUD 使用说明</a></li>
+                <li>🏠 <a href="https://infini-cloud.net/" target="_blank">InfiniCLOUD 官网</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

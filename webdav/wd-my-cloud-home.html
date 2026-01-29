@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WD My Cloud Home WebDAV 配置说明</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans CJK SC", sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            padding: 16px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 24px 20px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #667eea;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #667eea;
+        }
+        .info-item {
+            margin-bottom: 12px;
+            padding: 12px;
+            background: #f8f9ff;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 4px;
+        }
+        .info-value {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Courier New', monospace;
+            color: #333;
+            word-break: break-all;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 12px;
+        }
+        .tip {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 12px;
+        }
+        .link-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        .link-list li {
+            margin-bottom: 8px;
+        }
+        .link-list a {
+            color: #667eea;
+            text-decoration: none;
+            word-break: break-all;
+        }
+        .link-list a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 480px) {
+            body {
+                padding: 12px;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            .card {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>WD My Cloud Home WebDAV 配置</h1>
+            <p class="subtitle">Western Digital 个人云存储设备</p>
+        </div>
+
+        <div class="card">
+            <h2>📋 默认配置参考</h2>
+            <div class="info-item">
+                <div class="info-label">服务器地址（示例）</div>
+                <div class="info-value">wdmycloudXXXXXX.local 或 192.168.x.x</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">协议</div>
+                <div class="info-value">HTTP (端口 80)</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">根路径（典型）</div>
+                <div class="info-value">/Public</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">认证方式</div>
+                <div class="info-value">Basic Authentication</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔑 账号与认证</h2>
+            <p><strong>用户名：</strong>您的 My Cloud Home 设备管理员账户</p>
+            <p style="margin-top: 8px;"><strong>密码：</strong>设备管理员密码</p>
+            
+            <div class="tip">
+                <strong>💡 提示</strong>
+                <p style="margin-top: 4px;">My Cloud Home 的 WebDAV 功能默认可能未启用，具体支持情况取决于固件版本。</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🌐 如何获取设备地址</h2>
+            <ol style="padding-left: 20px;">
+                <li><strong>局域网内：</strong>
+                    <ul style="padding-left: 20px; margin-top: 4px;">
+                        <li>使用设备名称：<code>wdmycloudXXXXXX.local</code>（XXXXXX 为设备编号）</li>
+                        <li>或使用内网 IP：在路由器管理界面查看设备 IP（如 192.168.1.x）</li>
+                    </ul>
+                </li>
+                <li style="margin-top: 8px;"><strong>通过 My Cloud 应用：</strong>
+                    <ul style="padding-left: 20px; margin-top: 4px;">
+                        <li>打开 My Cloud Home 移动应用</li>
+                        <li>在设备设置中查看网络信息</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <div class="warning">
+                <strong>⚠️ 注意事项</strong>
+                <ul style="padding-left: 20px; margin-top: 4px;">
+                    <li>My Cloud Home 默认使用 HTTP（非加密），局域网使用相对安全</li>
+                    <li>不同固件版本的 WebDAV 配置可能有差异</li>
+                    <li>根路径可能是 <code>/</code>、<code>/Public</code> 或其他，请根据实际情况调整</li>
+                    <li>端口通常是 80，但某些配置下可能使用其他端口</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>⚙️ 配置建议</h2>
+            <ul style="padding-left: 20px;">
+                <li>确保设备和手机在同一局域网内</li>
+                <li>如果连接失败，尝试以下根路径：
+                    <ul style="padding-left: 20px; margin-top: 4px;">
+                        <li><code>/</code></li>
+                        <li><code>/Public</code></li>
+                        <li><code>/shares/Public</code></li>
+                    </ul>
+                </li>
+                <li>检查设备固件是否为最新版本</li>
+                <li>部分型号可能需要在设备设置中手动启用 WebDAV</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>📚 官方参考</h2>
+            <ul class="link-list">
+                <li>📖 <a href="https://support-en.wd.com/" target="_blank">WD 支持中心</a></li>
+                <li>🏠 <a href="https://www.westerndigital.com/products/cloud-storage" target="_blank">WD My Cloud 产品页</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
