@@ -40,6 +40,7 @@
             margin-bottom: 12px; padding: 12px; background: #f8f9ff;
             border-left: 4px solid #667eea; border-radius: 4px;
         }
+        .faq-answer { white-space: pre-line; }
         .info-label { font-weight: 600; color: #667eea; margin-bottom: 4px; }
         .info-value {
             font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Courier New', monospace;
@@ -223,8 +224,8 @@
                 faqTitle: "🔍 Frequently Asked Questions",
                 faqs: [
                     {
-                        q: "Q: What to do if connection fails?",
-                        a: "A: Please check:",
+                        q: "What to do if connection fails?",
+                        a: "Please check:",
                         items: [
                             "Server address, port, and path are correct",
                             "Username and password are correct",
@@ -234,12 +235,12 @@
                         ]
                     },
                     {
-                        q: "Q: What should the root path be?",
-                        a: "A: Root path depends on your WebDAV server configuration. Common values include: /, /webdav, /remote.php/dav/files/USERNAME/, etc. Please refer to your server documentation."
+                        q: "What should the root path be?",
+                        a: "Root path depends on your WebDAV server configuration.\nCommon values include: /, /webdav, /remote.php/dav/files/USERNAME/, etc.\nPlease refer to your server documentation."
                     },
                     {
-                        q: "Q: Can I use HTTP?",
-                        a: "A: Technically yes, but strongly not recommended. HTTP is unencrypted, your username and password will be transmitted in plain text. Use HTTP only for testing on LAN."
+                        q: "Can I use HTTP?",
+                        a: "Technically yes, but strongly not recommended. HTTP is unencrypted, your username and password will be transmitted in plain text. Use HTTP only for testing on LAN."
                     }
                 ],
                 refsTitle: "📚 Reference Resources",
@@ -316,8 +317,8 @@
                 faqTitle: "🔍 常见问题",
                 faqs: [
                     {
-                        q: "Q: 连接失败怎么办？",
-                        a: "A: 请检查：",
+                        q: "连接失败怎么办？",
+                        a: "请检查：",
                         items: [
                             "服务器地址、端口、路径是否正确",
                             "用户名和密码是否正确",
@@ -327,12 +328,12 @@
                         ]
                     },
                     {
-                        q: "Q: 根路径应该填什么？",
-                        a: "A: 根路径取决于您的 WebDAV 服务器配置。常见值包括：/、/webdav、/remote.php/dav/files/USERNAME/ 等。请查阅您的服务器文档。"
+                        q: "根路径应该填什么？",
+                        a: "根路径取决于您的 WebDAV 服务器配置。\n常见值包括：/、 /webdav、 /remote.php/dav/files/USERNAME/ 等。\n请查阅您的服务器文档。"
                     },
                     {
-                        q: "Q: 可以使用 HTTP 吗？",
-                        a: "A: 技术上可以，但强烈不推荐。HTTP 不加密，您的用户名和密码会以明文传输。仅在局域网内测试时使用 HTTP。"
+                        q: "可以使用 HTTP 吗？",
+                        a: "技术上可以，但强烈不推荐。HTTP 不加密，您的用户名和密码会以明文传输。仅在局域网内测试时使用 HTTP。"
                     }
                 ],
                 refsTitle: "📚 参考资源",
@@ -409,8 +410,8 @@
                 faqTitle: "🔍 よくある質問",
                 faqs: [
                     {
-                        q: "Q: 接続に失敗した場合はどうすればよいですか？",
-                        a: "A: 以下を確認してください：",
+                        q: "接続に失敗した場合はどうすればよいですか？",
+                        a: "以下を確認してください：",
                         items: [
                             "サーバーアドレス、ポート、パスが正しいか",
                             "ユーザー名とパスワードが正しいか",
@@ -420,12 +421,12 @@
                         ]
                     },
                     {
-                        q: "Q: ルートパスには何を入力すればよいですか？",
-                        a: "A: ルートパスは WebDAV サーバーの設定によって異なります。一般的な値には、/、/webdav、/remote.php/dav/files/USERNAME/ などがあります。サーバーのドキュメントを参照してください。"
+                        q: "ルートパスには何を入力すればよいですか？",
+                        a: "ルートパスは WebDAV サーバーの設定によって異なります。\n一般的な値：/、 /webdav、 /remote.php/dav/files/USERNAME/ など。\nサーバーのドキュメントを参照してください。"
                     },
                     {
-                        q: "Q: HTTP を使用できますか？",
-                        a: "A: 技術的には可能ですが、強く推奨されません。HTTP は暗号化されていないため、ユーザー名とパスワードが平文で送信されます。LAN でのテスト時のみ HTTP を使用してください。"
+                        q: "HTTP を使用できますか？",
+                        a: "技術的には可能ですが、強く推奨されません。HTTP は暗号化されていないため、ユーザー名とパスワードが平文で送信されます。LAN でのテスト時のみ HTTP を使用してください。"
                     }
                 ],
                 refsTitle: "📚 参考リソース",
@@ -502,8 +503,8 @@
                 faqTitle: "🔍 Часто задаваемые вопросы",
                 faqs: [
                     {
-                        q: "Q: Что делать, если подключение не удалось?",
-                        a: "A: Пожалуйста, проверьте:",
+                        q: "Что делать, если подключение не удалось?",
+                        a: "Пожалуйста, проверьте:",
                         items: [
                             "Правильность адреса сервера, порта и пути",
                             "Правильность имени пользователя и пароля",
@@ -513,12 +514,12 @@
                         ]
                     },
                     {
-                        q: "Q: Что должно быть в корневом пути?",
-                        a: "A: Корневой путь зависит от конфигурации вашего сервера WebDAV. Обычные значения включают: /, /webdav, /remote.php/dav/files/USERNAME/ и т.д. Пожалуйста, обратитесь к документации вашего сервера."
+                        q: "Что должно быть в корневом пути?",
+                        a: "Корневой путь зависит от конфигурации вашего сервера WebDAV.\nОбычные значения включают: /, /webdav, /remote.php/dav/files/USERNAME/ и т.д.\nПожалуйста, обратитесь к документации вашего сервера."
                     },
                     {
-                        q: "Q: Можно ли использовать HTTP?",
-                        a: "A: Технически да, но настоятельно не рекомендуется. HTTP не шифруется, ваше имя пользователя и пароль будут передаваться в открытом виде. Используйте HTTP только для тестирования в локальной сети."
+                        q: "Можно ли использовать HTTP?",
+                        a: "Технически да, но настоятельно не рекомендуется. HTTP не шифруется, ваше имя пользователя и пароль будут передаваться в открытом виде. Используйте HTTP только для тестирования в локальной сети."
                     }
                 ],
                 refsTitle: "📚 Справочные ресурсы",
@@ -613,6 +614,7 @@
                 faqContent.appendChild(h3);
                 
                 const p = document.createElement('p');
+                p.className = 'faq-answer';
                 p.style.marginBottom = faq.items ? '12px' : '16px';
                 p.textContent = faq.a;
                 faqContent.appendChild(p);
