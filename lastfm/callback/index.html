@@ -115,11 +115,6 @@
 
       var deepLink = "musicx://auth/lastfm?token=" + encodeURIComponent(token);
       openBtn.href = deepLink;
-      // iOS Safari 往往更偏好“用户手势”触发 scheme 跳转
-      openBtn.addEventListener("click", function (e) {
-        e.preventDefault();
-        window.location.href = deepLink;
-      });
 
       // 尝试自动打开（部分浏览器/系统可能拦截非用户手势触发的 scheme）
       var opened = false;
@@ -128,14 +123,8 @@
       }
       document.addEventListener("visibilitychange", onVisibilityChange);
 
-      // 尽力自动跳（可能被 Safari 拦截，按钮兜底即可）
-      window.setTimeout(function () {
-        try {
-          window.location.replace(deepLink);
-        } catch (_) {
-          window.location.href = deepLink;
-        }
-      }, 100);
+      // 立刻触发一次自动跳转
+      window.location.href = deepLink;
 
       // 兜底：若未切到后台，展示按钮让用户点击
       window.setTimeout(function () {
