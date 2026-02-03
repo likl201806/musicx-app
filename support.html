@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Support — MusicX</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans CJK SC", "Noto Sans CJK JP", sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .lang-switcher {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin: 6px 0 16px;
+        }
+
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .lang-btn.active {
+            background: rgba(255, 255, 255, 0.9);
+            color: #4b3f7a;
+            font-weight: 700;
+        }
+
+        .back-button {
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin-bottom: 12px;
+            transition: background 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .content {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 50px;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .last-updated {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 1.5rem;
+            margin-top: 35px;
+            margin-bottom: 15px;
+        }
+
+        h2:first-of-type {
+            margin-top: 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: #444;
+        }
+
+        ul, ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            color: #444;
+        }
+
+        strong {
+            color: #333;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .highlight-box {
+            background: #f8f9ff;
+            border-left: 4px solid #667eea;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .link-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .link-item {
+            background: #f8f9ff;
+            border: 1px solid rgba(102, 126, 234, 0.25);
+            border-radius: 10px;
+            padding: 12px 14px;
+        }
+
+        .link-item a {
+            display: inline-block;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 30px 25px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            h2 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-button" id="back-button">← Back to Home</a>
+
+        <div class="lang-switcher">
+            <button class="lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
+            <button class="lang-btn" data-lang="zh" onclick="switchLang('zh')">中文</button>
+            <button class="lang-btn" data-lang="ja" onclick="switchLang('ja')">日本語</button>
+            <button class="lang-btn" data-lang="ru" onclick="switchLang('ru')">RU</button>
+        </div>
+
+        <div class="content">
+            <h1 id="title">Technical Support — MusicX</h1>
+            <p class="last-updated" id="last-updated">Last Updated: 2026-02-03</p>
+
+            <div class="section">
+                <h2 id="contact-title">Contact</h2>
+                <p id="contact-desc">If you need help with MusicX, please contact us by email.</p>
+                <p><strong id="email-label">Email:</strong> <a href="mailto:kylele2089@gmail.com">kylele2089@gmail.com</a></p>
+                <div class="highlight-box">
+                    <p id="contact-tip">To help us troubleshoot faster, please include your device model, OS version, MusicX version, and a short description (plus screenshots if possible).</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 id="quick-links-title">Quick Links</h2>
+                <p id="quick-links-desc">These pages explain how to configure popular services and how to get required app passwords.</p>
+                <div class="link-grid" id="quick-links"></div>
+            </div>
+
+            <div class="section">
+                <h2 id="faq-title">Common Questions</h2>
+                <ul id="faq-list"></ul>
+                <div class="warning-box">
+                    <p><strong id="copyright-title">Copyright Notice</strong></p>
+                    <p id="copyright-desc">MusicX does not provide or host copyrighted content. Please only access media that you own or have rights to use.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 id="legal-title">Legal</h2>
+                <p id="legal-desc">Please read our policies:</p>
+                <p>
+                    <a href="privacy-policy.html" id="privacy-link">📄 Privacy Policy</a>
+                    |
+                    <a href="terms-of-service.html" id="tos-link">📋 Terms of Service</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                pageTitle: "Technical Support — MusicX",
+                back: "← Back to Home",
+                lastUpdated: "Last Updated: 2026-02-03",
+                contactTitle: "Contact",
+                contactDesc: "If you need help with MusicX, please contact us by email.",
+                emailLabel: "Email:",
+                contactTip: "To help us troubleshoot faster, please include your device model, OS version, MusicX version, and a short description (plus screenshots if possible).",
+                quickLinksTitle: "Quick Links",
+                quickLinksDesc: "These pages explain how to configure popular services and how to get required app passwords.",
+                quickLinks: [
+                    { text: "🌐 WebDAV: InfiniCLOUD (Apps Password / Apps Connection)", url: "webdav/infini-cloud.html" },
+                    { text: "🌐 WebDAV: Yandex Disk (App Password)", url: "webdav/yandex-disk.html" },
+                    { text: "🌐 WebDAV: Synology NAS", url: "webdav/synology.html" },
+                    { text: "🌐 WebDAV: Custom / Other Providers", url: "webdav/custom.html" }
+                ],
+                faqTitle: "Common Questions",
+                faq: [
+                    "Where do I find App Password / Apps Password? Open the default bookmark inside MusicX.",
+                    "WebDAV login fails: verify server address, root path, and that you used the correct app password (not your main login password).",
+                    "Some files don’t show up: check account permissions and whether the service supports directory listing over WebDAV.",
+                    "Playback issues: try re-importing the file, check codec support, and confirm the file is not corrupted."
+                ],
+                copyrightTitle: "Copyright Notice",
+                copyrightDesc: "MusicX does not provide or host copyrighted content. Please only access media that you own or have rights to use.",
+                legalTitle: "Legal",
+                legalDesc: "Please read our policies:",
+                privacyLink: "📄 Privacy Policy",
+                tosLink: "📋 Terms of Service"
+            },
+            zh: {
+                pageTitle: "技术支持 — MusicX",
+                back: "← 返回首页",
+                lastUpdated: "更新日期：2026-02-03",
+                contactTitle: "联系支持",
+                contactDesc: "如你在使用 MusicX 过程中遇到问题，请通过邮件联系我们。",
+                emailLabel: "邮箱：",
+                contactTip: "为了更快定位问题，建议在邮件中提供：设备型号、系统版本、MusicX 版本、问题描述（尽量附截图/录屏）。",
+                quickLinksTitle: "快速入口",
+                quickLinksDesc: "这些页面会说明常见服务的配置方法，以及如何获取所需的应用密码（App Password / Apps Password）。",
+                quickLinks: [
+                    { text: "🌐 WebDAV：InfiniCLOUD（Apps Password / Apps Connection）", url: "webdav/infini-cloud.html" },
+                    { text: "🌐 WebDAV：Yandex Disk（App Password）", url: "webdav/yandex-disk.html" },
+                    { text: "🌐 WebDAV：Synology 群晖 NAS", url: "webdav/synology.html" },
+                    { text: "🌐 WebDAV：自定义/其他服务商", url: "webdav/custom.html" }
+                ],
+                faqTitle: "常见问题",
+                faq: [
+                    "App Password / Apps Password 在哪获取？可直接在 MusicX 的【书签】里打开默认书签获取。",
+                    "WebDAV 登录失败：请核对服务器地址、根路径，并确认使用的是“应用密码”（而不是官网登录密码）。",
+                    "部分文件不显示：请检查账号权限，以及服务端是否支持 WebDAV 目录列表。",
+                    "播放异常：可尝试重新导入文件，检查编码格式是否支持，并确认文件未损坏。"
+                ],
+                copyrightTitle: "版权提示",
+                copyrightDesc: "MusicX 不提供、不托管任何受版权保护的内容。请仅访问你拥有或有权使用的媒体内容。",
+                legalTitle: "法律条款",
+                legalDesc: "请阅读我们的政策：",
+                privacyLink: "📄 隐私政策",
+                tosLink: "📋 服务条款"
+            },
+            ja: {
+                pageTitle: "テクニカルサポート — MusicX",
+                back: "← ホームに戻る",
+                lastUpdated: "最終更新日：2026-02-03",
+                contactTitle: "お問い合わせ",
+                contactDesc: "MusicX に関するサポートが必要な場合は、メールでご連絡ください。",
+                emailLabel: "メール：",
+                contactTip: "調査を迅速に進めるため、端末機種・OS バージョン・MusicX バージョン・症状の説明（可能ならスクリーンショット/録画）を添えてください。",
+                quickLinksTitle: "クイックリンク",
+                quickLinksDesc: "よく使われるサービスの設定方法や、必要なアプリ用パスワードの取得方法を案内します。",
+                quickLinks: [
+                    { text: "🌐 WebDAV：InfiniCLOUD（Apps Password / Apps Connection）", url: "webdav/infini-cloud.html" },
+                    { text: "🌐 WebDAV：Yandex Disk（App Password）", url: "webdav/yandex-disk.html" },
+                    { text: "🌐 WebDAV：Synology NAS", url: "webdav/synology.html" },
+                    { text: "🌐 WebDAV：カスタム/その他プロバイダー", url: "webdav/custom.html" }
+                ],
+                faqTitle: "よくある質問",
+                faq: [
+                    "App Password / Apps Password はどこで取得できますか？MusicX の「ブックマーク」にある既定ブックマークから開けます。",
+                    "WebDAV にログインできない：サーバー、ルートパス、そしてメインパスワードではなくアプリ用パスワードを使っているか確認してください。",
+                    "一部のファイルが表示されない：権限や、サーバーが WebDAV のディレクトリ一覧に対応しているか確認してください。",
+                    "再生の不具合：再インポート、コーデック対応状況の確認、ファイル破損がないかをご確認ください。"
+                ],
+                copyrightTitle: "著作権に関する注意",
+                copyrightDesc: "MusicX は著作権保護されたコンテンツを提供・ホストしません。権利を有するメディアのみをご利用ください。",
+                legalTitle: "法的情報",
+                legalDesc: "ポリシーをご確認ください：",
+                privacyLink: "📄 プライバシーポリシー",
+                tosLink: "📋 利用規約"
+            },
+            ru: {
+                pageTitle: "Техническая поддержка — MusicX",
+                back: "← На главную",
+                lastUpdated: "Дата обновления: 2026-02-03",
+                contactTitle: "Связаться с поддержкой",
+                contactDesc: "Если вам нужна помощь с MusicX, напишите нам на email.",
+                emailLabel: "Email:",
+                contactTip: "Чтобы мы быстрее разобрались, укажите модель устройства, версию ОС, версию MusicX и краткое описание проблемы (по возможности со скриншотами/записью экрана).",
+                quickLinksTitle: "Быстрые ссылки",
+                quickLinksDesc: "Здесь собраны страницы по настройке популярных сервисов и получению необходимых паролей приложений.",
+                quickLinks: [
+                    { text: "🌐 WebDAV: InfiniCLOUD (Apps Password / Apps Connection)", url: "webdav/infini-cloud.html" },
+                    { text: "🌐 WebDAV: Yandex Disk (App Password)", url: "webdav/yandex-disk.html" },
+                    { text: "🌐 WebDAV: Synology NAS", url: "webdav/synology.html" },
+                    { text: "🌐 WebDAV: Пользовательский / другие провайдеры", url: "webdav/custom.html" }
+                ],
+                faqTitle: "Частые вопросы",
+                faq: [
+                    "Где взять App Password / Apps Password? Откройте закладку по умолчанию внутри MusicX.",
+                    "Не удаётся войти по WebDAV: проверьте адрес сервера, корневой путь и что вы используете пароль приложения (а не основной пароль).",
+                    "Некоторые файлы не отображаются: проверьте права доступа и поддержку листинга каталогов по WebDAV на стороне сервиса.",
+                    "Проблемы с воспроизведением: попробуйте переимпортировать файл, проверьте поддержку кодека и отсутствие повреждений."
+                ],
+                copyrightTitle: "Уведомление об авторских правах",
+                copyrightDesc: "MusicX не предоставляет и не хостит контент, защищённый авторским правом. Используйте только медиа, на которые у вас есть права.",
+                legalTitle: "Правовая информация",
+                legalDesc: "Пожалуйста, ознакомьтесь с нашими документами:",
+                privacyLink: "📄 Политика конфиденциальности",
+                tosLink: "📋 Условия обслуживания"
+            }
+        };
+
+        function detectLanguage() {
+            const browserLang = navigator.language || navigator.userLanguage;
+            const langCode = (browserLang || 'en').toLowerCase().split('-')[0];
+            return translations[langCode] ? langCode : 'en';
+        }
+
+        function setActiveLangButton(lang) {
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            const btn = document.querySelector(`.lang-btn[data-lang="${lang}"]`);
+            if (btn) btn.classList.add('active');
+        }
+
+        function renderQuickLinks(links) {
+            const container = document.getElementById('quick-links');
+            container.innerHTML = '';
+            links.forEach(link => {
+                const item = document.createElement('div');
+                item.className = 'link-item';
+                const a = document.createElement('a');
+                a.href = link.url;
+                a.textContent = link.text;
+                item.appendChild(a);
+                container.appendChild(item);
+            });
+        }
+
+        function renderFaq(items) {
+            const list = document.getElementById('faq-list');
+            list.innerHTML = '';
+            items.forEach(text => {
+                const li = document.createElement('li');
+                li.textContent = text;
+                list.appendChild(li);
+            });
+        }
+
+        function switchLang(lang) {
+            const t = translations[lang];
+            if (!t) return;
+
+            document.documentElement.lang = lang;
+            document.title = t.pageTitle;
+            document.getElementById('title').textContent = t.pageTitle;
+            document.getElementById('back-button').textContent = t.back;
+            document.getElementById('last-updated').textContent = t.lastUpdated;
+
+            document.getElementById('contact-title').textContent = t.contactTitle;
+            document.getElementById('contact-desc').textContent = t.contactDesc;
+            document.getElementById('email-label').textContent = t.emailLabel;
+            document.getElementById('contact-tip').textContent = t.contactTip;
+
+            document.getElementById('quick-links-title').textContent = t.quickLinksTitle;
+            document.getElementById('quick-links-desc').textContent = t.quickLinksDesc;
+            renderQuickLinks(t.quickLinks);
+
+            document.getElementById('faq-title').textContent = t.faqTitle;
+            renderFaq(t.faq);
+
+            document.getElementById('copyright-title').textContent = t.copyrightTitle;
+            document.getElementById('copyright-desc').textContent = t.copyrightDesc;
+
+            document.getElementById('legal-title').textContent = t.legalTitle;
+            document.getElementById('legal-desc').textContent = t.legalDesc;
+            document.getElementById('privacy-link').textContent = t.privacyLink;
+            document.getElementById('tos-link').textContent = t.tosLink;
+
+            setActiveLangButton(lang);
+
+            try {
+                localStorage.setItem('preferredLanguage', lang);
+            } catch (_) {
+                // ignore
+            }
+        }
+
+        window.onload = function () {
+            let savedLang = 'en';
+            try {
+                savedLang = localStorage.getItem('preferredLanguage') || detectLanguage();
+            } catch (_) {
+                savedLang = detectLanguage();
+            }
+            switchLang(savedLang);
+        };
+    </script>
+</body>
+</html>
