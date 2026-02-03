@@ -212,6 +212,11 @@
                 <strong id="tip-title"></strong>
                 <p style="margin-top: 4px;" id="tip-content"></p>
             </div>
+
+            <div class="tip">
+                <strong id="bookmark-tip-title"></strong>
+                <p style="margin-top: 4px;" id="bookmark-tip-content"></p>
+            </div>
         </div>
 
         <div class="card">
@@ -247,6 +252,8 @@
                 passwordDesc: "Use App Password (recommended; do not use your main password)",
                 tipTitle: "💡 Why App Password",
                 tipContent: "To sign in to Yandex Disk via WebDAV/third-party apps, it's recommended to create an App Password. This keeps your main account password private and safer.",
+                bookmarkTipTitle: "🔖 Quick access in MusicX",
+                bookmarkTipContent: "MusicX has a default bookmark for the App Password page. Open it from Bookmarks to get your App Password quickly.",
                 howtoTitle: "🔐 How to Create App Password",
                 howtoSteps: [
                     "Open https://passport.yandex.com and sign in",
@@ -281,6 +288,8 @@
                 passwordDesc: "请使用 App Password（应用密码，不要用登录密码）",
                 tipTitle: "💡 为什么需要应用密码",
                 tipContent: "要在 Yandex Disk 中通过 WebDAV 或第三方应用登录，通常需要创建 App Password（应用密码），以保护主账号密码不被第三方软件直接使用。",
+                bookmarkTipTitle: "🔖 在 MusicX 中快速打开",
+                bookmarkTipContent: "MusicX 已在【书签】里默认添加了获取 App Password（应用密码）的网址书签。你可以直接打开该书签获取/创建 App Password。",
                 howtoTitle: "🔐 如何获取 App Password（应用密码）",
                 howtoSteps: [
                     "访问 https://passport.yandex.com 并登录",
@@ -316,6 +325,8 @@
                 passwordDesc: "App Password（アプリパスワード）を使用（推奨）",
                 tipTitle: "💡 App Password について",
                 tipContent: "WebDAV/サードパーティアプリで Yandex Disk に接続する場合、App Password（アプリパスワード）の作成が推奨されます。メインパスワードを第三者に渡さずに済みます。",
+                bookmarkTipTitle: "🔖 MusicX からすぐ開く",
+                bookmarkTipContent: "MusicX の「ブックマーク」に、App Password を取得するページへの既定ブックマークがあります。そこから直接開いて作成できます。",
                 howtoTitle: "🔐 App Password の作成手順",
                 howtoSteps: [
                     "https://passport.yandex.com にアクセスしてログイン",
@@ -350,6 +361,8 @@
                 passwordDesc: "Используйте пароль приложения (App Password), это рекомендуется",
                 tipTitle: "💡 Зачем нужен App Password",
                 tipContent: "Для входа в Yandex Disk через WebDAV/сторонние приложения рекомендуется создать App Password, чтобы не использовать основной пароль аккаунта.",
+                bookmarkTipTitle: "🔖 Быстрый доступ в MusicX",
+                bookmarkTipContent: "В MusicX в «Закладках» уже добавлена закладка на страницу App Password. Откройте её из Закладок, чтобы быстро получить пароль приложения.",
                 howtoTitle: "🔐 Как создать App Password",
                 howtoSteps: [
                     "Откройте https://passport.yandex.com и войдите",
@@ -402,6 +415,8 @@
             document.getElementById('password-desc').textContent = t.passwordDesc;
             document.getElementById('tip-title').textContent = t.tipTitle;
             document.getElementById('tip-content').textContent = t.tipContent;
+            document.getElementById('bookmark-tip-title').textContent = t.bookmarkTipTitle;
+            document.getElementById('bookmark-tip-content').textContent = t.bookmarkTipContent;
             document.getElementById('howto-title').textContent = t.howtoTitle;
             document.getElementById('warning-title').textContent = t.warningTitle;
             document.getElementById('warning-content').textContent = t.warningContent;

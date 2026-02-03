@@ -167,6 +167,11 @@
                 <strong id="tip-title"></strong>
                 <p style="margin-top: 4px;" id="tip-content"></p>
             </div>
+
+            <div class="tip">
+                <strong id="bookmark-tip-title"></strong>
+                <p style="margin-top: 4px;" id="bookmark-tip-content"></p>
+            </div>
         </div>
 
         <div class="card">
@@ -202,6 +207,8 @@
                 passwordDesc: "Apps Password (My Page → Apps Connection; not your login password)",
                 tipTitle: "💡 Important Note",
                 tipContent: "InfiniCLOUD WebDAV uses Apps Connection credentials. Please enable Apps Connection in My Page and use the WebDAV Connection URL shown there. Each account has a different node prefix (server).",
+                bookmarkTipTitle: "🔖 Quick access in MusicX",
+                bookmarkTipContent: "MusicX has a default bookmark for the Apps Connection page. Open it from Bookmarks to get (or reissue) your Apps Password quickly.",
                 howtoTitle: "🌐 How to Get WebDAV Credentials",
                 howtoSteps: [
                     "Log in to InfiniCLOUD website",
@@ -235,6 +242,8 @@
                 passwordDesc: "Apps Password（在 My Page → Apps Connection 中生成；不是登录密码）",
                 tipTitle: "💡 重要提示",
                 tipContent: "InfiniCLOUD 的 WebDAV 需要启用 Apps Connection。请在 My Page 打开 Apps Connection，并使用其中显示的 WebDAV Connection URL。每个账号的节点前缀（服务器）都不同。",
+                bookmarkTipTitle: "🔖 在 MusicX 中快速打开",
+                bookmarkTipContent: "MusicX 已在【书签】里默认添加了 Apps Connection（获取 Apps Password）的网址书签。你可以直接打开该书签来生成/查看（或重置）Apps Password。",
                 howtoTitle: "🌐 如何获取 WebDAV 登录信息",
                 howtoSteps: [
                     "登录 InfiniCLOUD 官网",
@@ -268,6 +277,8 @@
                 passwordDesc: "Apps Password（My Page → Apps Connection。ログインパスワードではありません）",
                 tipTitle: "💡 重要な注意",
                 tipContent: "InfiniCLOUD WebDAV は Apps Connection の資格情報を使用します。My Page で Apps Connection を有効化し、そこに表示される WebDAV Connection URL を使ってください。ユーザーごとにノード（サーバー）が異なります。",
+                bookmarkTipTitle: "🔖 MusicX からすぐ開く",
+                bookmarkTipContent: "MusicX の「ブックマーク」に、Apps Connection ページへの既定ブックマークがあります。そこから直接開いて Apps Password を取得（または再発行）できます。",
                 howtoTitle: "🌐 WebDAV 情報の取得方法",
                 howtoSteps: [
                     "InfiniCLOUD ウェブサイトにログイン",
@@ -301,6 +312,8 @@
                 passwordDesc: "Apps Password (My Page → Apps Connection; не пароль входа)",
                 tipTitle: "💡 Важное примечание",
                 tipContent: "InfiniCLOUD WebDAV использует учетные данные Apps Connection. Включите Apps Connection в My Page и используйте WebDAV Connection URL, указанный там. У каждого пользователя свой узел (сервер).",
+                bookmarkTipTitle: "🔖 Быстрый доступ в MusicX",
+                bookmarkTipContent: "В MusicX в «Закладках» уже добавлена закладка на страницу Apps Connection. Откройте её из Закладок, чтобы быстро получить (или перевыпустить) Apps Password.",
                 howtoTitle: "🌐 Как получить данные для WebDAV",
                 howtoSteps: [
                     "Войдите на сайт InfiniCLOUD",
@@ -358,6 +371,8 @@
             document.getElementById('password-desc').textContent = t.passwordDesc;
             document.getElementById('tip-title').textContent = t.tipTitle;
             document.getElementById('tip-content').textContent = t.tipContent;
+            document.getElementById('bookmark-tip-title').textContent = t.bookmarkTipTitle;
+            document.getElementById('bookmark-tip-content').textContent = t.bookmarkTipContent;
             document.getElementById('howto-title').textContent = t.howtoTitle;
             document.getElementById('warning-title').textContent = t.warningTitle;
             document.getElementById('warning-content').textContent = t.warningContent;
